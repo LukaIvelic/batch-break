@@ -1,23 +1,25 @@
 "use client";
 
 import { Button, Input, Subtitle, Title } from "@/src/components/features";
-import { styles } from "./EmailLoginPage.styles";
+import { styles } from "./EmailLogin.styles";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { Spinner } from "../../ui/spinner";
-import { useLogin } from "./EmailLoginPage.utils";
+import { useLogin } from "./EmailLogin.utils";
 
-export function EmailLoginPage() {
+export function EmailLogin() {
   const searchParams = useSearchParams();
+
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
+
   const [showUnauthorizedDialog, setShowUnauthorizedDialog] =
     useState<boolean>(false);
   const { handleLogin, isLoading } = useLogin();
 
-  useEffect(()=>{
+  useEffect(() => {
     passwordRef.current?.focus();
-  }, [])
+  }, []);
 
   return (
     <main className={styles.main()}>

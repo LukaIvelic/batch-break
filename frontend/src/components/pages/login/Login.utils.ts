@@ -1,9 +1,10 @@
 import { isInDatabase } from "@/src/api/services/users/UsersService";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
-import { FormEvent } from "react";
+import { FormEvent, useState } from "react";
 
 const handleLoginEmail = async (
   event: FormEvent<HTMLFormElement>,
+  setIsLoading: (loading: boolean) => void,
   router?: AppRouterInstance,
   emailRef?: React.RefObject<HTMLInputElement | null>,
 ) => {
@@ -18,11 +19,14 @@ const handleLoginEmail = async (
   }
 
   try {
+    setIsLoading(true);
     const isInDb = await isInDatabase(email);
     const target = isInDb ? "/login/email" : "/signup";
     router.push(`${target}?email=${encodeURIComponent(email)}`);
   } catch (error) {
     console.error(error);
+  } finally {
+    setIsLoading(false);
   }
 };
 
@@ -53,9 +57,12 @@ const useLoginUtils = ({
   githubRef,
   emailRef,
 }: useLoginUtilsProps) => {
+  const [isLoading, setIsLoading] = useState(false);
+
   return {
+    isLoading,
     handleLoginEmail: (e: FormEvent<HTMLFormElement>) =>
-      handleLoginEmail(e, router, emailRef),
+      handleLoginEmail(e, setIsLoading, router, emailRef),
     handleLoginGoogle: () => handleLoginGoogle(router, googleRef),
     handleLoginGithub: () => handleLoginGithub(router, githubRef),
   };

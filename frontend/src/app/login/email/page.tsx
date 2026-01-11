@@ -1,5 +1,5 @@
-import { EmailLoginPage } from "@/src/components/pages/email-login-page/EmailLoginPage";
+import { EmailLogin } from "@/src/components/pages/email-login/EmailLogin";
 
-export default function EmailLogin() {
-  return <EmailLoginPage />;
+export default function EmailLoginPage() {
+  return <EmailLogin />;
 }

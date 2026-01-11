@@ -2,17 +2,18 @@
 
 import { Button, Input, Subtitle, Title } from "@/src/components/features";
 import { Separator } from "@/src/components/features/separator/Separator";
-import { styles } from "./LoginPage.styles";
-import { useLoginUtils } from "./LoginPage.utils";
+import { styles } from "./Login.styles";
+import { useLoginUtils } from "./Login.utils";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef } from "react";
+import { Spinner } from "../../ui/spinner";
 
-export function LoginPage() {
+export function Login() {
   const router = useRouter();
   const googleRef = useRef<HTMLButtonElement>(null);
   const githubRef = useRef<HTMLButtonElement>(null);
   const emailRef = useRef<HTMLInputElement>(null);
-  const { handleLoginEmail, handleLoginGoogle, handleLoginGithub } =
+  const { handleLoginEmail, handleLoginGoogle, handleLoginGithub, isLoading } =
     useLoginUtils({
       router,
       googleRef,
@@ -20,9 +21,9 @@ export function LoginPage() {
       emailRef,
     });
 
-    useEffect(()=>{
-      emailRef.current?.focus();
-    }, []);
+  useEffect(() => {
+    emailRef.current?.focus();
+  }, []);
 
   return (
     <main className={styles.main()}>
@@ -56,8 +57,18 @@ export function LoginPage() {
           className={styles.formGroup}
           onSubmit={(e) => handleLoginEmail(e)}
         >
-          <Input placeholder="Email address" type="email" ref={emailRef} />
-          <Button className={styles.submitButton}>Continue</Button>
+          <Input
+            placeholder="Email address"
+            type="email"
+            ref={emailRef}
+            autoComplete="email"
+          />
+          <Button className={styles.submitButton}>
+            <div className={styles.buttonContent}>
+              {isLoading && <Spinner />}
+              Continue
+            </div>
+          </Button>
         </form>
         <div className="flex items-center justify-center gap-2 text-sm text-[#5e5e5e]">
           <a href="/" className="underline">

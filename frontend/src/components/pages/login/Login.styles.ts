@@ -13,6 +13,7 @@ export const styles = {
   authGroup: cn("flex flex-col gap-2 mt-4"),
   formGroup: cn("flex flex-col gap-2"),
   socialButton: cn("hover:bg-foreground/10 hover:border-foreground/10"),
+  buttonContent: cn("flex items-center gap-2 justify-center"),
   submitButton: cn(
     "bg-foreground text-background font-medium border-none hover:bg-foreground/70",
   ),

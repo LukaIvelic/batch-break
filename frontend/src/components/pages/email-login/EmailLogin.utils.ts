@@ -22,16 +22,12 @@ interface HandleLoginProps extends LoginFormData {
 
 async function handleLoginLogic(props: HandleLoginProps): Promise<boolean> {
   const { e, emailRef, passwordRef, router, setIsLoading } = props;
-
   e.preventDefault();
   setIsLoading(true);
-
   try {
     const email = emailRef.current?.value || "";
     const password = passwordRef.current?.value || "";
-
     const result = await login(email, password);
-
     if (result.response?.access_token) {
       router.push("/dashboard");
       return true;

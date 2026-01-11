@@ -4,6 +4,7 @@ export const ENDPOINTS = {
   AUTH_ENDPOINT: {
     LOGIN: (email: string, password: string) =>
       `${API_BASE_URL}/auth/login?email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`,
+    SIGNUP: () => `${API_BASE_URL}/auth/signup`,
   },
   USERS_ENDPOINT: {
     POST: `${API_BASE_URL}/users`,

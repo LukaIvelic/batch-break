@@ -1,8 +1,8 @@
-import { NestResponse } from "@/src/lib/config/response";
 import { apiRequest } from "../../config";
 import { ENDPOINTS } from "../../config/endpoints";
 import { StatusCodes } from "http-status-codes";
 import { tokenStorage } from "../../config/token-storage";
+import { NestResponse } from "../../responses/response";
 
 const { AUTH_ENDPOINT } = ENDPOINTS;
 
@@ -46,4 +46,40 @@ export function logout() {
 
 export function isAuthenticated() {
   return tokenStorage.isAuthenticated();
+}
+
+export async function signup(
+  email: string,
+  password: string,
+  confirmPassword: string,
+  firstName: string,
+  lastName: string,
+) {
+  const response = await apiRequest<NestResponse<LoginResponse>>(
+    AUTH_ENDPOINT.SIGNUP(),
+    {
+      method: "POST",
+      body: JSON.stringify({
+        email,
+        password,
+        confirmPassword,
+        firstName,
+        lastName,
+      }),
+      cache: "no-store",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    },
+  );
+
+  if (response.status > StatusCodes.MULTIPLE_CHOICES) {
+    throw new Error("Signup failed");
+  }
+
+  if (response.response?.access_token) {
+    tokenStorage.setToken(response.response.access_token);
+  }
+
+  return response;
 }

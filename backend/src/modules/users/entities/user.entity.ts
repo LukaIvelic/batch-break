@@ -1,15 +1,22 @@
+import { Role } from 'src/modules/roles/entities/role.entity';
 import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  ManyToOne,
+  JoinColumn,
 } from 'typeorm';
 
 @Entity('users')
 export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
+
+  @ManyToOne(() => Role)
+  @JoinColumn({ name: 'role_id' })
+  role: Role;
 
   @Column({ unique: true })
   email: string;

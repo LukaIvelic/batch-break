@@ -1,6 +1,6 @@
 # Batch Break
 
-A full-stack web application built with **NestJS** (backend) and **Next.js** (frontend), featuring user authentication, dashboard functionality, and a modern UI component library.
+A full-stack web application built with **NestJS** (backend) and **Next.js** (frontend), featuring user authentication with role-based access control, dashboard functionality, and a modern UI component library.
 
 ---
 
@@ -18,7 +18,8 @@ batch_break/
 
 ## ✨ Features
 
-- **User Authentication** – JWT-based login and session management
+- **User Authentication** – JWT-based login and signup with session management
+- **Role-Based Access Control** – User roles with database-level relationships
 - **User Management** – Full CRUD operations for user accounts
 - **Dashboard** – Protected dashboard with sidebar navigation
 - **API Documentation** – Swagger/OpenAPI integration
@@ -180,9 +181,10 @@ npm run test:e2e
 
 ### Authentication
 
-| Method | Endpoint      | Description |
-| ------ | ------------- | ----------- |
-| POST   | `/auth/login` | User login  |
+| Method | Endpoint       | Description       |
+| ------ | -------------- | ----------------- |
+| POST   | `/auth/login`  | User login        |
+| POST   | `/auth/signup` | User registration |
 
 ### Users
 
@@ -209,8 +211,9 @@ backend/src/
 │   ├── filters/               # Exception filters
 │   └── interceptors/          # Response interceptors
 └── modules/
-    ├── auth/                  # Authentication module
+    ├── auth/                  # Authentication module (login, signup)
     ├── database/              # Database configuration
+    ├── roles/                 # Role management module
     └── users/                 # User management module
 ```
 

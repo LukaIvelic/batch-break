@@ -10,14 +10,10 @@ import { FooterLinks } from "../../features/footer-links/FooterLinks";
 
 export function Login() {
   const router = useRouter();
-  const googleRef = useRef<HTMLButtonElement>(null);
-  const githubRef = useRef<HTMLButtonElement>(null);
   const emailRef = useRef<HTMLInputElement>(null);
   const { handleLoginEmail, handleLoginGoogle, handleLoginGithub, isLoading } =
     useLoginUtils({
       router,
-      googleRef,
-      githubRef,
       emailRef,
     });
 
@@ -54,7 +50,6 @@ export function Login() {
             imageSrc="/images/google_logo.png"
             className={styles.socialButton}
             onClick={handleLoginGoogle}
-            ref={googleRef}
           >
             Continue with Google
           </Button>
@@ -62,7 +57,6 @@ export function Login() {
             imageSrc="/images/github_logo.png"
             className={styles.socialButton}
             onClick={handleLoginGithub}
-            ref={githubRef}
           >
             Continue with GitHub
           </Button>

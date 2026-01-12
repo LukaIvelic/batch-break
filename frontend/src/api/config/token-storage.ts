@@ -3,7 +3,7 @@ export const tokenStorage = {
     if (typeof document === "undefined") return null;
 
     const match = document.cookie.match(
-      new RegExp("(^| )access_token=([^;]+)")
+      new RegExp("(^| )access_token=([^;]+)"),
     );
 
     return match ? decodeURIComponent(match[2]) : null;
@@ -12,9 +12,9 @@ export const tokenStorage = {
   setToken: (token: string): void => {
     const sevenDays = 7 * 24 * 60 * 60;
     const expires = new Date(Date.now() + sevenDays * 1000).toUTCString();
-    
+
     document.cookie = `access_token=${encodeURIComponent(
-      token
+      token,
     )}; path=/; SameSite=Lax; expires=${expires}`;
   },
 

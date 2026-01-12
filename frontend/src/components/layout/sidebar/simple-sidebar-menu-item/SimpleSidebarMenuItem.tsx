@@ -1,6 +1,9 @@
 "use client";
 
-import { SidebarMenuItem, SidebarMenuButton } from "@/src/components/ui/sidebar";
+import {
+  SidebarMenuItem,
+  SidebarMenuButton,
+} from "@/src/components/ui/sidebar";
 import type { SidebarMenuItem as SidebarMenuItemType } from "../sidebar.config";
 
 interface SimpleSidebarMenuItemProps {

@@ -10,12 +10,12 @@ export const styles = {
     "w-[325px] h-fit flex flex-col justify-center gap-4 -translate-y-[50%]",
   ),
   header: cn("text-center flex flex-col gap-2"),
-  authGroup: cn("flex flex-col gap-2 mt-4"),
   formGroup: cn("flex flex-col gap-2"),
-  socialButton: cn("hover:bg-foreground/10 hover:border-foreground/10"),
   errorText: cn("text-sm text-red-500 text-center pb-2"),
-  buttonContent: cn("flex items-center gap-2 justify-center"),
   submitButton: cn(
-    "bg-foreground text-background font-medium border-none hover:bg-foreground/70",
+    "bg-foreground text-background font-medium border-none hover:bg-foreground/70 disabled:opacity-50",
   ),
+  footer: cn("flex items-center justify-center gap-2 text-sm text-[#5e5e5e]"),
+  footerLink: cn("underline"),
+  footerDivider: cn("h-[14px] w-px bg-[#5e5e5e]/60"),
 };

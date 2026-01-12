@@ -25,10 +25,9 @@ export async function createUser(payload: Partial<User>): Promise<User | null> {
 
 export async function getAllUsers(): Promise<User[] | null> {
   try {
-    const res = await apiRequest<NestResponse<User[]>>(
-      USERS_ENDPOINT.GET_ALL,
-      { cache: "no-store" },
-    );
+    const res = await apiRequest<NestResponse<User[]>>(USERS_ENDPOINT.GET_ALL, {
+      cache: "no-store",
+    });
 
     return res.response ?? null;
   } catch {
@@ -54,14 +53,11 @@ export async function updateUser(
   payload: Partial<User>,
 ): Promise<User | null> {
   try {
-    const res = await apiRequest<NestResponse<User>>(
-      USERS_ENDPOINT.PATCH(id),
-      {
-        method: "PATCH",
-        body: JSON.stringify(payload),
-        cache: "no-store",
-      },
-    );
+    const res = await apiRequest<NestResponse<User>>(USERS_ENDPOINT.PATCH(id), {
+      method: "PATCH",
+      body: JSON.stringify(payload),
+      cache: "no-store",
+    });
 
     return res.response ?? null;
   } catch {

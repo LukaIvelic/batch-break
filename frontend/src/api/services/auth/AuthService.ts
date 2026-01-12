@@ -26,6 +26,8 @@ export async function login(
     },
   );
 
+  console.log("Login response:", response);
+
   if (response.status > StatusCodes.MULTIPLE_CHOICES) {
     throw new Error("Login failed");
   }

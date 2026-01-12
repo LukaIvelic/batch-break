@@ -4,7 +4,6 @@ import { useAuth } from "@/src/api/services";
 import { Subtitle, Title } from "@/src/components/features";
 
 export default function DashboardPage() {
-
   const { user } = useAuth();
 
   return (

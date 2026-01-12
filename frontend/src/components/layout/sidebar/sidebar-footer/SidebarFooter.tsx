@@ -25,14 +25,21 @@ interface AppSidebarFooterProps {
   onActionClick: (action: SidebarUserAction) => void;
 }
 
-export function AppSidebarFooter({ user, actions, onActionClick }: AppSidebarFooterProps) {
+export function AppSidebarFooter({
+  user,
+  actions,
+  onActionClick,
+}: AppSidebarFooterProps) {
   return (
     <SidebarFooter>
       <SidebarMenu>
         <SidebarMenuItem>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <SidebarMenuButton size="lg" className={sidebarFooterStyles.menuButton}>
+              <SidebarMenuButton
+                size="lg"
+                className={sidebarFooterStyles.menuButton}
+              >
                 <Avatar className={sidebarFooterStyles.avatar}>
                   <AvatarFallback>{getUserInitials(user)}</AvatarFallback>
                 </Avatar>
@@ -40,14 +47,22 @@ export function AppSidebarFooter({ user, actions, onActionClick }: AppSidebarFoo
                   <span className={sidebarFooterStyles.userName}>
                     {user?.firstName} {user?.lastName}
                   </span>
-                  <span className={sidebarFooterStyles.userEmail}>{user?.email}</span>
+                  <span className={sidebarFooterStyles.userEmail}>
+                    {user?.email}
+                  </span>
                 </div>
                 <ChevronDown className={sidebarFooterStyles.chevron} />
               </SidebarMenuButton>
             </DropdownMenuTrigger>
-            <DropdownMenuContent side="top" className={sidebarFooterStyles.dropdown}>
+            <DropdownMenuContent
+              side="top"
+              className={sidebarFooterStyles.dropdown}
+            >
               {actions.map((action) => (
-                <DropdownMenuItem key={action.label} onClick={() => onActionClick(action)}>
+                <DropdownMenuItem
+                  key={action.label}
+                  onClick={() => onActionClick(action)}
+                >
                   <action.icon className={sidebarFooterStyles.actionIcon} />
                   <span>{action.label}</span>
                 </DropdownMenuItem>

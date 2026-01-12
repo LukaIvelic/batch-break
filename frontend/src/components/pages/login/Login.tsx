@@ -6,7 +6,7 @@ import { styles } from "./Login.styles";
 import { useLoginUtils } from "./Login.utils";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef } from "react";
-import { Spinner } from "../../ui/spinner";
+import { FooterLinks } from "../../features/footer-links/FooterLinks";
 
 export function Login() {
   const router = useRouter();
@@ -31,9 +31,24 @@ export function Login() {
         <div className={styles.header}>
           <Title>Log in or sign up</Title>
           <Subtitle>
-            You'll get access to internal workflows, finances and more
+            You&apos;ll get access to internal workflows, finances and more
           </Subtitle>
         </div>
+        <form
+          className={styles.formGroup}
+          onSubmit={(e) => handleLoginEmail(e)}
+        >
+          <Input
+            placeholder="Email address"
+            type="email"
+            ref={emailRef}
+            autoComplete="email"
+          />
+          <Button className={styles.submitButton} isLoading={isLoading}>
+            Continue
+          </Button>
+        </form>
+        <Separator />
         <div className={styles.authGroup}>
           <Button
             imageSrc="/images/google_logo.png"
@@ -52,33 +67,7 @@ export function Login() {
             Continue with GitHub
           </Button>
         </div>
-        <Separator />
-        <form
-          className={styles.formGroup}
-          onSubmit={(e) => handleLoginEmail(e)}
-        >
-          <Input
-            placeholder="Email address"
-            type="email"
-            ref={emailRef}
-            autoComplete="email"
-          />
-          <Button className={styles.submitButton}>
-            <div className={styles.buttonContent}>
-              {isLoading && <Spinner />}
-              Continue
-            </div>
-          </Button>
-        </form>
-        <div className="flex items-center justify-center gap-2 text-sm text-[#5e5e5e]">
-          <a href="/" className="underline">
-            Terms of Use
-          </a>
-          <div className="h-[14px] w-px bg-[#5e5e5e]/60"></div>
-          <a href="/" className="underline">
-            Privacy Policy
-          </a>
-        </div>
+        <FooterLinks />
       </div>
     </main>
   );

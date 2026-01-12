@@ -1,6 +1,10 @@
 "use client";
 
-import { SidebarHeader, SidebarTrigger, useSidebar } from "@/src/components/ui/sidebar";
+import {
+  SidebarHeader,
+  SidebarTrigger,
+  useSidebar,
+} from "@/src/components/ui/sidebar";
 import { sidebarHeaderStyles } from "./SidebarHeader.styles";
 
 interface AppSidebarHeaderProps {

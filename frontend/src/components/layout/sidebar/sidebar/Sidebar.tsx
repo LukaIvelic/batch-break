@@ -16,7 +16,10 @@ export function AppSidebar() {
       <AppSidebarHeader title={sidebarConfig.title} />
 
       <SidebarContent>
-        <AppSidebarMenu label={sidebarConfig.menuLabel} items={sidebarConfig.menuItems} />
+        <AppSidebarMenu
+          label={sidebarConfig.menuLabel}
+          items={sidebarConfig.menuItems}
+        />
       </SidebarContent>
 
       <AppSidebarFooter

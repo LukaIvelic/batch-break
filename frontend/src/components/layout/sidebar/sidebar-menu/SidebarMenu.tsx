@@ -26,7 +26,7 @@ export function AppSidebarMenu({ label, items }: AppSidebarMenuProps) {
               <CollapsibleSidebarMenuItem key={item.title} item={item} />
             ) : (
               <SimpleSidebarMenuItem key={item.title} item={item} />
-            )
+            ),
           )}
         </SidebarMenu>
       </SidebarGroupContent>

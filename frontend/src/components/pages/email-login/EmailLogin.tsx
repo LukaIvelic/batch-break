@@ -4,7 +4,6 @@ import { Button, Input, Subtitle, Title } from "@/src/components/features";
 import { styles } from "./EmailLogin.styles";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { Spinner } from "../../ui/spinner";
 import { useLogin } from "./EmailLogin.utils";
 
 export function EmailLogin() {
@@ -27,7 +26,7 @@ export function EmailLogin() {
         <div className={styles.header}>
           <Title>Welcome back to Batch Break</Title>
           <Subtitle>
-            You'll get access to internal workflows, finances and more
+            You&apos;ll get access to internal workflows, finances and more
           </Subtitle>
         </div>
 
@@ -53,14 +52,11 @@ export function EmailLogin() {
           />
 
           {showUnauthorizedDialog && (
-            <p className={styles.errorText}>Wrong email or password</p>
+            <p className={styles.errorText}>Incorrect email or password</p>
           )}
 
-          <Button className={styles.submitButton}>
-            <div className={styles.buttonContent}>
-              {isLoading && <Spinner />}
-              Log in
-            </div>
+          <Button className={styles.submitButton} isLoading={isLoading}>
+            Log in
           </Button>
         </form>
 

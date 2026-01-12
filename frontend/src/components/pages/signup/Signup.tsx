@@ -1,37 +1,46 @@
 "use client";
 
-import { Button, Input, Subtitle, Title } from "@/src/components/features";
-import { styles } from "./Signup.styles";
+import { useRef } from "react";
 import { useSearchParams } from "next/navigation";
-import { FormEvent, useRef, useState } from "react";
-import { useSignup } from "./Signup.utils";
-import { Spinner } from "../../ui/spinner";
+import { Button, Input, Subtitle, Title } from "@/src/components/features";
+import { useSignup } from "./signup-utils";
+import { styles } from "./Signup.styles";
+import { FooterLinks } from "../../features/footer-links/FooterLinks";
 
 export function Signup() {
   const searchParams = useSearchParams();
-  const firstNameRef = useRef<HTMLInputElement>(null);
-  const lastNameRef = useRef<HTMLInputElement>(null);
-  const emailRef = useRef<HTMLInputElement>(null);
-  const passwordRef = useRef<HTMLInputElement>(null);
-  const confirmPasswordRef = useRef<HTMLInputElement>(null);
+  const { handleSignup, isLoading, error } = useSignup();
 
-  const { isLoading, handleSignup } = useSignup();
-  const [showErrorDialog, setShowErrorDialog] = useState<boolean>(false);
-
-  const handleSignUp = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    handleSignup({
-      e,
-      emailRef,
-      passwordRef,
-      confirmPasswordRef,
-      firstNameRef,
-      lastNameRef,
-    }).then((res) => {
-      setShowErrorDialog(!res);
-    });
+  const refs = {
+    firstName: useRef<HTMLInputElement>(null),
+    lastName: useRef<HTMLInputElement>(null),
+    email: useRef<HTMLInputElement>(null),
+    password: useRef<HTMLInputElement>(null),
+    confirmPassword: useRef<HTMLInputElement>(null),
   };
+
+  const fields = [
+    { name: "firstName", placeholder: "First Name", type: "text" },
+    { name: "lastName", placeholder: "Last Name", type: "text" },
+    {
+      name: "email",
+      placeholder: "Email address",
+      type: "email",
+      defaultValue: searchParams.get("email") || "",
+    },
+    {
+      name: "password",
+      placeholder: "Password",
+      type: "password",
+      auto: "new-password",
+    },
+    {
+      name: "confirmPassword",
+      placeholder: "Confirm Password",
+      type: "password",
+      auto: "new-password",
+    },
+  ];
 
   return (
     <main className={styles.main()}>
@@ -39,68 +48,34 @@ export function Signup() {
         <div className={styles.header}>
           <Title>Sign up to Batch Break</Title>
           <Subtitle>
-            You'll get access to internal workflows, finances and more
+            You&apos;ll get access to internal workflows, finances and more
           </Subtitle>
         </div>
+
         <form
           className={styles.formGroup}
-          onSubmit={(e) => {
-            handleSignUp(e);
-          }}
+          onSubmit={(e) => handleSignup(e, refs)}
         >
-          <Input
-            placeholder="First Name"
-            type="text"
-            ref={firstNameRef}
-            required
-          />
-          <Input
-            placeholder="Last Name"
-            type="text"
-            ref={lastNameRef}
-            required
-          />
-          <Input
-            placeholder="Email address"
-            type="email"
-            defaultValue={searchParams.get("email") || ""}
-            ref={emailRef}
-          />
-          <Input
-            placeholder="Password"
-            autoComplete="new-password"
-            type="password"
-            ref={passwordRef}
-            required
-          />
-          <Input
-            placeholder="Confirm Password"
-            autoComplete="new-password"
-            type="password"
-            ref={confirmPasswordRef}
-            required
-          />
+          {fields.map((f) => (
+            <Input
+              key={f.name}
+              ref={refs[f.name as keyof typeof refs]}
+              placeholder={f.placeholder}
+              type={f.type}
+              defaultValue={f.defaultValue}
+              autoComplete={f.auto}
+              required
+            />
+          ))}
 
-          {showErrorDialog && (
-            <p className={styles.errorText}>Sign up failed</p>
-          )}
+          {error && <p className={styles.errorText}>{error}</p>}
 
-          <Button className={styles.submitButton}>
-            <div className={styles.buttonContent}>
-              {isLoading && <Spinner />}
-              Sign up
-            </div>
+          <Button className={styles.submitButton} isLoading={isLoading}>
+            Sign up
           </Button>
         </form>
-        <div className="flex items-center justify-center gap-2 text-sm text-[#5e5e5e]">
-          <a href="/" className="underline">
-            Terms of Use
-          </a>
-          <div className="h-[14px] w-px bg-[#5e5e5e]/60"></div>
-          <a href="/" className="underline">
-            Privacy Policy
-          </a>
-        </div>
+
+        <FooterLinks />
       </div>
     </main>
   );

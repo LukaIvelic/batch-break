@@ -14,7 +14,10 @@ interface AuthSession {
   user: User | null;
   isAuthenticated: boolean;
   isLoading: boolean;
-  login: (email: string, password: string) => Promise<NestResponse<LoginResponse>>;
+  login: (
+    email: string,
+    password: string,
+  ) => Promise<NestResponse<LoginResponse>>;
   logout: () => void;
   refetch: () => Promise<void>;
 }
@@ -34,11 +37,11 @@ export function useAuth(): AuthSession {
         return;
       }
 
-      const payload = JSON.parse(atob(token.split('.')[1]));
-      
+      const payload = JSON.parse(atob(token.split(".")[1]));
+
       const response = await apiRequest<NestResponse<User>>(
         ENDPOINTS.USERS_ENDPOINT.FIND_BY_EMAIL(payload.email),
-        { cache: "no-store" }
+        { cache: "no-store" },
       );
 
       if (response.response) {

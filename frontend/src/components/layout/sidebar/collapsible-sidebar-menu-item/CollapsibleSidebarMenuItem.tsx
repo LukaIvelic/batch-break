@@ -20,7 +20,9 @@ interface CollapsibleSidebarMenuItemProps {
   item: SidebarMenuItemType;
 }
 
-export function CollapsibleSidebarMenuItem({ item }: CollapsibleSidebarMenuItemProps) {
+export function CollapsibleSidebarMenuItem({
+  item,
+}: CollapsibleSidebarMenuItemProps) {
   if (!item.items || item.items.length === 0) return null;
 
   return (
@@ -30,7 +32,9 @@ export function CollapsibleSidebarMenuItem({ item }: CollapsibleSidebarMenuItemP
           <SidebarMenuButton>
             <item.icon />
             <span>{item.title}</span>
-            <ChevronRight className={collapsibleSidebarMenuItemStyles.chevron} />
+            <ChevronRight
+              className={collapsibleSidebarMenuItemStyles.chevron}
+            />
           </SidebarMenuButton>
         </CollapsibleTrigger>
         <CollapsibleContent>

@@ -3,24 +3,25 @@
 import Image from "next/image";
 import { styles } from "./Button.styles";
 import React from "react";
+import { Spinner } from "../../ui/spinner";
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  imageSrc?: string;
   children: React.ReactNode;
+  isLoading?: boolean;
+  imageSrc?: string;
   centerContent?: boolean;
-  ref?: React.Ref<HTMLButtonElement>;
 }
 
 export function Button({
   children,
   imageSrc,
+  isLoading,
   centerContent = false,
   className,
-  ref,
   ...rest
 }: ButtonProps) {
   return (
-    <button className={styles.button(className)} {...rest}>
+    <button className={styles.button(className)} {...rest} disabled={isLoading}>
       {imageSrc && (
         <div className={styles.iconWrapper}>
           <Image
@@ -32,7 +33,8 @@ export function Button({
         </div>
       )}
 
-      <div className={styles.textWrapper(imageSrc, centerContent)}>
+      <div className={styles.textWrapper(imageSrc, centerContent, isLoading)}>
+        {isLoading && <Spinner />}
         {children}
       </div>
     </button>

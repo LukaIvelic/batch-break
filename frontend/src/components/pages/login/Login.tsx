@@ -22,14 +22,10 @@ export function Login() {
   }, []);
 
   return (
-    <main
-      className={cn(
-        `mx-auto max-w-350 h-full flex justify-center items-center`,
-      )}
-    >
+    <main className={cn(`mx-auto max-w-350 h-full flex justify-center`)}>
       <div
         className={cn(
-          `w-81.25 h-fit flex flex-col justify-center gap-4 -translate-y-[50%]`,
+          `w-81.25 h-fit flex flex-col justify-center gap-4 translate-y-[calc(325px/2)]`,
         )}
       >
         <div className={cn(`text-center flex flex-col gap-2 pb-4`)}>

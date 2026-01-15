@@ -47,14 +47,10 @@ export function Signup() {
   ];
 
   return (
-    <main
-      className={cn(
-        `mx-auto max-w-[1400px] h-full flex justify-center items-center`,
-      )}
-    >
+    <main className={cn(`mx-auto max-w-[1400px] h-full flex justify-center`)}>
       <div
         className={cn(
-          `w-[325px] h-fit flex flex-col justify-center gap-4 -translate-y-[50%]`,
+          `w-[325px] h-fit flex flex-col justify-center gap-4 translate-y-[calc(325px/2)]`,
         )}
       >
         <div className={cn(`text-center flex flex-col gap-2`)}>

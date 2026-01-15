@@ -1,0 +1,11 @@
+{
+  "$schema": "https://unpkg.com/knip@5/schema.json",
+  "tags": ["-lintignore"],
+  "ignoreDependencies": [
+    "@eslint/js",
+    "globals",
+    "typescript-eslint",
+    "eslint-plugin-prettier",
+    "eslint-config-next"
+  ]
+}

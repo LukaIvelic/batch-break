@@ -1,4 +1,4 @@
-import { styles } from "./Title.styles";
+import { cn } from "@/lib/utils";
 
 interface TitleProps extends React.HTMLAttributes<HTMLHeadingElement> {
   children: React.ReactNode;
@@ -6,7 +6,7 @@ interface TitleProps extends React.HTMLAttributes<HTMLHeadingElement> {
 
 export function Title({ children, className, ...rest }: TitleProps) {
   return (
-    <h1 className={styles.title(className)} {...rest}>
+    <h1 className={cn(`text-[20px] font-medium`, className)} {...rest}>
       {children}
     </h1>
   );

@@ -1,5 +1,6 @@
 "use client";
 
+import { useId } from "react";
 import { ChevronDown } from "lucide-react";
 import {
   SidebarFooter,
@@ -14,9 +15,9 @@ import {
   DropdownMenuTrigger,
 } from "@/src/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "@/src/components/ui/avatar";
-import type { User } from "@/src/lib/types";
+import { cn } from "@/lib/utils";
+import type { User } from "@/src/types";
 import type { SidebarUserAction } from "../sidebar.config";
-import { sidebarFooterStyles } from "./SidebarFooter.styles";
 import { getUserInitials } from "./SidebarFooter.utils";
 
 interface AppSidebarFooterProps {
@@ -30,40 +31,40 @@ export function AppSidebarFooter({
   actions,
   onActionClick,
 }: AppSidebarFooterProps) {
+  const dropdownId = useId();
+
   return (
     <SidebarFooter>
       <SidebarMenu>
         <SidebarMenuItem>
           <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <SidebarMenuButton
-                size="lg"
-                className={sidebarFooterStyles.menuButton}
-              >
-                <Avatar className={sidebarFooterStyles.avatar}>
+            <DropdownMenuTrigger asChild id={dropdownId}>
+              <SidebarMenuButton size="lg" className={cn(`w-full`)}>
+                <Avatar className={cn(`h-8 w-8`)}>
                   <AvatarFallback>{getUserInitials(user)}</AvatarFallback>
                 </Avatar>
-                <div className={sidebarFooterStyles.userInfo}>
-                  <span className={sidebarFooterStyles.userName}>
+                <div className={cn(`flex flex-col items-start text-left`)}>
+                  <span className={cn(`text-sm font-medium`)}>
                     {user?.firstName} {user?.lastName}
                   </span>
-                  <span className={sidebarFooterStyles.userEmail}>
+                  <span className={cn(`text-xs text-muted-foreground`)}>
                     {user?.email}
                   </span>
                 </div>
-                <ChevronDown className={sidebarFooterStyles.chevron} />
+                <ChevronDown className={cn(`ml-auto`)} />
               </SidebarMenuButton>
             </DropdownMenuTrigger>
             <DropdownMenuContent
               side="top"
-              className={sidebarFooterStyles.dropdown}
+              align="start"
+              className={cn(`[width:var(--radix-dropdown-menu-trigger-width)]`)}
             >
               {actions.map((action) => (
                 <DropdownMenuItem
                   key={action.label}
                   onClick={() => onActionClick(action)}
                 >
-                  <action.icon className={sidebarFooterStyles.actionIcon} />
+                  <action.icon className={cn(`mr-2 h-4 w-4`)} />
                   <span>{action.label}</span>
                 </DropdownMenuItem>
               ))}

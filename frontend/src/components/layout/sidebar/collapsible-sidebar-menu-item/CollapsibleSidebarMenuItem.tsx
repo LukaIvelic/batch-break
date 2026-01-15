@@ -1,5 +1,6 @@
 "use client";
 
+import { useId } from "react";
 import { ChevronRight } from "lucide-react";
 import {
   SidebarMenuItem,
@@ -13,8 +14,8 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/src/components/ui/collapsible";
+import { cn } from "@/lib/utils";
 import type { SidebarMenuItem as SidebarMenuItemType } from "../sidebar.config";
-import { collapsibleSidebarMenuItemStyles } from "./CollapsibleSidebarMenuItem.styles";
 
 interface CollapsibleSidebarMenuItemProps {
   item: SidebarMenuItemType;
@@ -23,17 +24,21 @@ interface CollapsibleSidebarMenuItemProps {
 export function CollapsibleSidebarMenuItem({
   item,
 }: CollapsibleSidebarMenuItemProps) {
+  const collapsibleId = useId();
+
   if (!item.items || item.items.length === 0) return null;
 
   return (
-    <Collapsible asChild>
-      <SidebarMenuItem className="group/collapsible">
+    <Collapsible asChild id={collapsibleId}>
+      <SidebarMenuItem className={cn(`group/collapsible`)}>
         <CollapsibleTrigger asChild>
           <SidebarMenuButton>
             <item.icon />
             <span>{item.title}</span>
             <ChevronRight
-              className={collapsibleSidebarMenuItemStyles.chevron}
+              className={cn(
+                `ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90`,
+              )}
             />
           </SidebarMenuButton>
         </CollapsibleTrigger>

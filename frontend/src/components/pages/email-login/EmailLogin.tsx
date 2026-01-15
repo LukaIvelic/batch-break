@@ -1,10 +1,10 @@
 "use client";
 
 import { Button, Input, Subtitle, Title } from "@/src/components/features";
-import { styles } from "./EmailLogin.styles";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { useLogin } from "./EmailLogin.utils";
+import { cn } from "@/lib/utils";
 
 export function EmailLogin() {
   const searchParams = useSearchParams();
@@ -21,9 +21,17 @@ export function EmailLogin() {
   }, []);
 
   return (
-    <main className={styles.main()}>
-      <div className={styles.card}>
-        <div className={styles.header}>
+    <main
+      className={cn(
+        `mx-auto max-w-[1400px] h-full flex justify-center items-center`,
+      )}
+    >
+      <div
+        className={cn(
+          `w-[325px] h-fit flex flex-col justify-center gap-4 -translate-y-[50%]`,
+        )}
+      >
+        <div className={cn(`text-center flex flex-col gap-2`)}>
           <Title>Welcome back to Batch Break</Title>
           <Subtitle>
             You&apos;ll get access to internal workflows, finances and more
@@ -31,7 +39,7 @@ export function EmailLogin() {
         </div>
 
         <form
-          className={styles.formGroup}
+          className={cn(`flex flex-col gap-2`)}
           onSubmit={(e) => {
             handleLogin({ e, emailRef, passwordRef }).then((res) => {
               setShowUnauthorizedDialog(!res);
@@ -52,20 +60,26 @@ export function EmailLogin() {
           />
 
           {showUnauthorizedDialog && (
-            <p className={styles.errorText}>Incorrect email or password</p>
+            <p className={cn(`text-sm text-red-500 text-center pb-2`)}>
+              Incorrect email or password
+            </p>
           )}
 
-          <Button className={styles.submitButton} isLoading={isLoading}>
+          <Button className={cn(`inverted`)} isLoading={isLoading}>
             Log in
           </Button>
         </form>
 
-        <div className={styles.footer}>
-          <a href="/" className={styles.footerLink}>
+        <div
+          className={cn(
+            `flex items-center justify-center gap-2 text-sm text-[#5e5e5e]`,
+          )}
+        >
+          <a href="/" className={cn(`underline`)}>
             Terms of Use
           </a>
-          <div className={styles.footerDivider}></div>
-          <a href="/" className={styles.footerLink}>
+          <div className={cn(`h-[14px] w-px bg-[#5e5e5e]/60`)}></div>
+          <a href="/" className={cn(`underline`)}>
             Privacy Policy
           </a>
         </div>

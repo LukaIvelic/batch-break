@@ -1,12 +1,16 @@
 {
   "devDependencies": {
+    "@types/node": "^25.0.9",
     "eslint": "^9.39.2",
     "husky": "^9.1.7",
+    "knip": "^5.81.0",
     "lint-staged": "^16.2.7",
-    "prettier": "^3.7.4"
+    "prettier": "^3.7.4",
+    "typescript": "^5.9.3"
   },
   "scripts": {
-    "prepare": "husky"
+    "prepare": "husky",
+    "knip": "knip"
   },
   "lint-staged": {
     "frontend/**/*.{js,jsx,ts,tsx}": [

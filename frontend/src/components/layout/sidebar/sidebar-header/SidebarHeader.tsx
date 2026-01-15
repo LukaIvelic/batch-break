@@ -5,7 +5,7 @@ import {
   SidebarTrigger,
   useSidebar,
 } from "@/src/components/ui/sidebar";
-import { sidebarHeaderStyles } from "./SidebarHeader.styles";
+import { cn } from "@/lib/utils";
 
 interface AppSidebarHeaderProps {
   title: string;
@@ -16,8 +16,15 @@ export function AppSidebarHeader({ title }: AppSidebarHeaderProps) {
   const isExpanded = state === "expanded";
 
   return (
-    <SidebarHeader className={sidebarHeaderStyles.container(isExpanded)}>
-      {isExpanded && <h2 className={sidebarHeaderStyles.title}>{title}</h2>}
+    <SidebarHeader
+      className={cn(
+        `border-b border-sidebar-border flex flex-row items-center`,
+        isExpanded ? `p-4 justify-between` : `p-2 justify-center`,
+      )}
+    >
+      {isExpanded && (
+        <h2 className={cn(`text-lg font-medium whitespace-nowrap`)}>{title}</h2>
+      )}
       <SidebarTrigger />
     </SidebarHeader>
   );

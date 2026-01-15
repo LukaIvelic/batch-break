@@ -1,4 +1,4 @@
-import type { User } from "@/src/lib/types";
+import type { User } from "@/src/types";
 
 export const getUserInitials = (user: User | null): string => {
   if (!user) return "U";

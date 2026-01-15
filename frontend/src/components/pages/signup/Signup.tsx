@@ -1,11 +1,11 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import { Button, Input, Subtitle, Title } from "@/src/components/features";
 import { useSignup } from "./signup-utils";
-import { styles } from "./Signup.styles";
 import { FooterLinks } from "../../features/footer-links/FooterLinks";
+import { cn } from "@/lib/utils";
 
 export function Signup() {
   const searchParams = useSearchParams();
@@ -18,6 +18,10 @@ export function Signup() {
     password: useRef<HTMLInputElement>(null),
     confirmPassword: useRef<HTMLInputElement>(null),
   };
+
+  useEffect(() => {
+    refs.firstName.current?.focus();
+  }, []);
 
   const fields = [
     { name: "firstName", placeholder: "First Name", type: "text" },
@@ -43,9 +47,17 @@ export function Signup() {
   ];
 
   return (
-    <main className={styles.main()}>
-      <div className={styles.card}>
-        <div className={styles.header}>
+    <main
+      className={cn(
+        `mx-auto max-w-[1400px] h-full flex justify-center items-center`,
+      )}
+    >
+      <div
+        className={cn(
+          `w-[325px] h-fit flex flex-col justify-center gap-4 -translate-y-[50%]`,
+        )}
+      >
+        <div className={cn(`text-center flex flex-col gap-2`)}>
           <Title>Sign up to Batch Break</Title>
           <Subtitle>
             You&apos;ll get access to internal workflows, finances and more
@@ -53,7 +65,7 @@ export function Signup() {
         </div>
 
         <form
-          className={styles.formGroup}
+          className={cn(`flex flex-col gap-2`)}
           onSubmit={(e) => handleSignup(e, refs)}
         >
           {fields.map((f) => (
@@ -68,9 +80,13 @@ export function Signup() {
             />
           ))}
 
-          {error && <p className={styles.errorText}>{error}</p>}
+          {error && (
+            <p className={cn(`text-sm text-red-500 text-center pb-2`)}>
+              {error}
+            </p>
+          )}
 
-          <Button className={styles.submitButton} isLoading={isLoading}>
+          <Button className={cn(`inverted`)} isLoading={isLoading}>
             Sign up
           </Button>
         </form>

@@ -1,4 +1,4 @@
-import { styles } from "./Separator.styles";
+import { cn } from "@/lib/utils";
 
 interface SeparatorProps {
   className?: string;
@@ -6,10 +6,10 @@ interface SeparatorProps {
 
 export function Separator({ className }: SeparatorProps) {
   return (
-    <div className={styles.container(className)}>
-      <hr className={styles.line} />
-      <div className={styles.text}>OR</div>
-      <hr className={styles.line} />
+    <div className={cn(`flex items-center gap-2 h-fit`, className)}>
+      <hr className={cn(`w-full border-t border-foreground/10 my-4`)} />
+      <div className={cn(`text-[12px] text-[#5e5e5e] font-medium`)}>OR</div>
+      <hr className={cn(`w-full border-t border-foreground/10 my-4`)} />
     </div>
   );
 }

@@ -1,5 +1,7 @@
+"use client";
+
 import React, { useState, useMemo } from "react";
-import { styles } from "./Input.styles";
+import { cn } from "@/src/lib/utils/cn";
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   placeholder?: string;
@@ -39,16 +41,16 @@ export function Input({
   const isFloating = isFocused || hasValue;
 
   return (
-    <div className={styles.wrapper()}>
+    <div className={cn(`bbatch-input-wrapper`)}>
       <label
         htmlFor={"input-" + placeholder}
-        className={styles.label(isFloating)}
+        className={cn(`bbatch-input-label`, isFloating && `bbatch-floating`)}
       >
         {placeholder}
       </label>
       <input
         id={"input-" + placeholder}
-        className={styles.input(className)}
+        className={cn(`bbatch-input-field`, className)}
         ref={ref}
         type={type}
         onFocus={handleFocus}

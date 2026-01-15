@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import { tokenStorage } from "../../config/token-storage";
 import { login as authLogin, logout as authLogout } from "./AuthService";
-import { NestResponse } from "@/src/lib/config/response";
-import { User } from "@/src/lib/types";
 import { apiRequest } from "../../config";
 import { ENDPOINTS } from "../../config/endpoints";
+import { NestResponse } from "../../responses/response";
+import { User } from "@/src/types";
 
 interface LoginResponse {
   access_token: string;

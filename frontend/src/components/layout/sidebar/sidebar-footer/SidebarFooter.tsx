@@ -16,9 +16,9 @@ import {
 } from "@/src/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "@/src/components/ui/avatar";
 import { cn } from "@/lib/utils";
-import type { User } from "@/src/types";
 import type { SidebarUserAction } from "../sidebar.config";
 import { getUserInitials } from "./SidebarFooter.utils";
+import { User } from "@/src/types";
 
 interface AppSidebarFooterProps {
   user: User | null;

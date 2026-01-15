@@ -1,0 +1,18 @@
+@layer components {
+  .bbatch-input-wrapper {
+    @apply relative w-full;
+
+    .bbatch-input-label {
+      @apply text-[#5e5e5e] transition-all absolute left-4 px-1 pointer-events-none -translate-y-1/2 select-none;
+      @apply top-1/2;
+
+      &.bbatch-floating {
+        @apply top-0 text-xs bg-background;
+      }
+    }
+
+    .bbatch-input-field {
+      @apply border border-foreground/20 py-3 px-4 rounded-full outline-none w-full placeholder:text-transparent transition-all focus:ring-1 focus:ring-[#5e5e5e];
+    }
+  }
+}

@@ -1,9 +1,9 @@
 "use client";
 
 import Image from "next/image";
-import { styles } from "./Button.styles";
 import React from "react";
 import { Spinner } from "../../ui/spinner";
+import { cn } from "@/lib/utils";
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode;
@@ -21,19 +21,29 @@ export function Button({
   ...rest
 }: ButtonProps) {
   return (
-    <button className={styles.button(className)} {...rest} disabled={isLoading}>
+    <button
+      className={`bbatch-btn ${className ?? ""}`}
+      {...rest}
+      disabled={isLoading}
+    >
       {imageSrc && (
-        <div className={styles.iconWrapper}>
+        <div className="bbatch-btn-icon-wrapper">
           <Image
             src={imageSrc}
             fill
             alt="button icon"
-            className={styles.image}
+            className="bbatch-btn-image"
           />
         </div>
       )}
 
-      <div className={styles.textWrapper(imageSrc, centerContent, isLoading)}>
+      <div
+        className={cn(
+          `bbatch-btn-text-wrapper`,
+          !imageSrc || centerContent ? "" : "-translate-x-5",
+          isLoading ? "justify-center" : "justify-start",
+        )}
+      >
         {isLoading && <Spinner />}
         {children}
       </div>

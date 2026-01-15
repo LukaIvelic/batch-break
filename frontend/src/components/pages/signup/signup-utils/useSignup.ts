@@ -1,7 +1,7 @@
 import { useState, FormEvent, RefObject } from "react";
 import { useRouter } from "next/navigation";
-import { signup } from "@/src/api/services/auth/AuthService";
 import { validateSignup } from "./validation";
+import { authService } from "@/src/api";
 
 interface SignupResponse {
   success: boolean;
@@ -37,13 +37,13 @@ export function useSignup() {
 
     setIsLoading(true);
     try {
-      const result = await signup(
-        data.email,
-        data.password,
-        data.confirmPassword,
-        data.firstName,
-        data.lastName,
-      );
+      const result = await authService.signup({
+        email: data.email,
+        password: data.password,
+        confirmPassword: data.confirmPassword,
+        firstName: data.firstName,
+        lastName: data.lastName,
+      });
 
       if (result.response?.access_token) {
         router.push("/dashboard");

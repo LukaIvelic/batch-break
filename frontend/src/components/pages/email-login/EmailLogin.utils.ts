@@ -1,4 +1,4 @@
-import { login } from "@/src/api/services/auth/AuthService";
+import { authService } from "@/src/api";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { useRouter } from "next/navigation";
 import {
@@ -27,7 +27,7 @@ async function handleLoginLogic(props: HandleLoginProps): Promise<boolean> {
   try {
     const email = emailRef.current?.value || "";
     const password = passwordRef.current?.value || "";
-    const result = await login(email, password);
+    const result = await authService.login(email, password);
     if (result.response?.access_token) {
       router.push("/dashboard");
       return true;

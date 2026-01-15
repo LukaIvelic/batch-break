@@ -1,4 +1,4 @@
-import { isInDatabase } from "@/src/api/services/users/UsersService";
+import { usersService } from "@/src/api";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { FormEvent, useState } from "react";
 
@@ -20,7 +20,7 @@ const handleLoginEmail = async (
 
   try {
     setIsLoading(true);
-    const isInDb = await isInDatabase(email);
+    const isInDb = await usersService.exists(email);
     const target = isInDb ? "/login/email" : "/signup";
     router.push(`${target}?email=${encodeURIComponent(email)}`);
   } catch (error) {

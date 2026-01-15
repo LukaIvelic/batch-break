@@ -1,87 +1,69 @@
-import { apiRequest } from "../../config";
-import { ENDPOINTS } from "../../config/endpoints";
+import { api, endpoints, tokenStorage } from "../../config";
 import { StatusCodes } from "http-status-codes";
-import { tokenStorage } from "../../config/token-storage";
 import { NestResponse } from "../../responses/response";
-
-const { AUTH_ENDPOINT } = ENDPOINTS;
 
 interface LoginResponse {
   access_token: string;
 }
 
-export async function login(
-  email: string,
-  password: string,
-): Promise<NestResponse<LoginResponse>> {
-  const response = await apiRequest<NestResponse<LoginResponse>>(
-    AUTH_ENDPOINT.LOGIN(email, password),
-    {
-      method: "POST",
-      body: JSON.stringify({ email, password }),
-      cache: "no-store",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    },
-  );
-
-  console.log("Login response:", response);
-
-  if (response.status > StatusCodes.MULTIPLE_CHOICES) {
-    throw new Error("Login failed");
-  }
-
-  if (response.response?.access_token) {
-    tokenStorage.setToken(response.response.access_token);
-  }
-
-  return response;
+export interface SignupPayload {
+  email: string;
+  password: string;
+  confirmPassword: string;
+  firstName: string;
+  lastName: string;
 }
 
-export function logout() {
-  tokenStorage.removeToken();
-  if (typeof window !== "undefined") {
-    window.location.href = "/login";
+class AuthServiceClass {
+  async login(
+    email: string,
+    password: string,
+  ): Promise<NestResponse<LoginResponse>> {
+    const response = await api.post<NestResponse<LoginResponse>>(
+      endpoints.auth.login,
+      { email, password },
+      { cache: "no-store" },
+    );
+
+    if (response.status > StatusCodes.MULTIPLE_CHOICES) {
+      throw new Error("Login failed");
+    }
+
+    if (response.response?.access_token) {
+      tokenStorage.setToken(response.response.access_token);
+    }
+
+    return response;
+  }
+
+  async signup(payload: SignupPayload): Promise<NestResponse<LoginResponse>> {
+    const response = await api.post<NestResponse<LoginResponse>>(
+      endpoints.auth.signup,
+      payload,
+      { cache: "no-store" },
+    );
+
+    if (response.status > StatusCodes.MULTIPLE_CHOICES) {
+      throw new Error("Signup failed");
+    }
+
+    if (response.response?.access_token) {
+      tokenStorage.setToken(response.response.access_token);
+    }
+
+    return response;
+  }
+
+  logout(): void {
+    tokenStorage.removeToken();
+    if (typeof window !== "undefined") {
+      window.location.href = "/login";
+    }
+  }
+
+  isAuthenticated(): boolean {
+    return tokenStorage.isAuthenticated();
   }
 }
 
-export function isAuthenticated() {
-  return tokenStorage.isAuthenticated();
-}
-
-export async function signup(
-  email: string,
-  password: string,
-  confirmPassword: string,
-  firstName: string,
-  lastName: string,
-) {
-  const response = await apiRequest<NestResponse<LoginResponse>>(
-    AUTH_ENDPOINT.SIGNUP(),
-    {
-      method: "POST",
-      body: JSON.stringify({
-        email,
-        password,
-        confirmPassword,
-        firstName,
-        lastName,
-      }),
-      cache: "no-store",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    },
-  );
-
-  if (response.status > StatusCodes.MULTIPLE_CHOICES) {
-    throw new Error("Signup failed");
-  }
-
-  if (response.response?.access_token) {
-    tokenStorage.setToken(response.response.access_token);
-  }
-
-  return response;
-}
+export const authService = new AuthServiceClass();

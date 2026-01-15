@@ -1,104 +1,66 @@
-import { apiRequest } from "../../config";
-import { ENDPOINTS } from "../../config/endpoints";
+import { User } from "@/src/types";
+import { api, endpoints } from "../../config";
 import { NestResponse } from "../../responses/response";
 
-const { USERS_ENDPOINT } = ENDPOINTS;
-
-interface User {
-  id: string;
-  email: string;
-}
-
-export async function createUser(payload: Partial<User>): Promise<User | null> {
-  try {
-    const res = await apiRequest<NestResponse<User>>(USERS_ENDPOINT.POST, {
-      method: "POST",
-      body: JSON.stringify(payload),
+class UsersServiceClass {
+  async getAll(): Promise<User[]> {
+    const res = await api.get<NestResponse<User[]>>(endpoints.users.base, {
       cache: "no-store",
     });
-
-    return res.response ?? null;
-  } catch {
-    return null;
+    return res.response ?? [];
   }
-}
 
-export async function getAllUsers(): Promise<User[] | null> {
-  try {
-    const res = await apiRequest<NestResponse<User[]>>(USERS_ENDPOINT.GET_ALL, {
+  async getById(id: string): Promise<User | null> {
+    const res = await api.get<NestResponse<User>>(endpoints.users.byId(id), {
       cache: "no-store",
     });
-
     return res.response ?? null;
-  } catch {
-    return null;
   }
-}
 
-export async function getUserById(id: string): Promise<User | null> {
-  try {
-    const res = await apiRequest<NestResponse<User>>(
-      USERS_ENDPOINT.GET_BY_ID(id),
+  async findByEmail(email: string): Promise<User | null> {
+    const res = await api.get<NestResponse<User | null>>(
+      endpoints.users.findByEmail(email),
       { cache: "no-store" },
     );
-
     return res.response ?? null;
-  } catch {
-    return null;
   }
-}
 
-export async function updateUser(
-  id: string,
-  payload: Partial<User>,
-): Promise<User | null> {
-  try {
-    const res = await apiRequest<NestResponse<User>>(USERS_ENDPOINT.PATCH(id), {
-      method: "PATCH",
-      body: JSON.stringify(payload),
-      cache: "no-store",
-    });
-
-    return res.response ?? null;
-  } catch {
-    return null;
-  }
-}
-
-export async function deleteUser(id: string): Promise<boolean> {
-  try {
-    await apiRequest<NestResponse<void>>(USERS_ENDPOINT.DELETE(id), {
-      method: "DELETE",
-      cache: "no-store",
-    });
-    return true;
-  } catch {
-    return false;
-  }
-}
-
-export async function findByEmail(email: string): Promise<User | null> {
-  try {
-    const res = await apiRequest<NestResponse<User | null>>(
-      USERS_ENDPOINT.FIND_BY_EMAIL(email),
+  async exists(email: string): Promise<boolean> {
+    const res = await api.get<NestResponse<{ exists: boolean }>>(
+      endpoints.users.exists(email),
       { cache: "no-store" },
     );
-
-    return res.response ?? null;
-  } catch {
-    return null;
-  }
-}
-
-export async function isInDatabase(email: string): Promise<boolean> {
-  try {
-    const res = await apiRequest<NestResponse<{ exists: boolean }>>(
-      USERS_ENDPOINT.IS_IN_DATABASE(email),
-      { cache: "no-store" },
-    );
-
     return res.response?.exists ?? false;
-  } catch {
-    return false;
+  }
+
+  async create(payload: Partial<User>): Promise<User | null> {
+    const res = await api.post<NestResponse<User>>(
+      endpoints.users.base,
+      payload,
+      { cache: "no-store" },
+    );
+    return res.response ?? null;
+  }
+
+  async update(id: string, payload: Partial<User>): Promise<User | null> {
+    const res = await api.patch<NestResponse<User>>(
+      endpoints.users.byId(id),
+      payload,
+      { cache: "no-store" },
+    );
+    return res.response ?? null;
+  }
+
+  async delete(id: string): Promise<boolean> {
+    try {
+      await api.delete<NestResponse<void>>(endpoints.users.byId(id), {
+        cache: "no-store",
+      });
+      return true;
+    } catch {
+      return false;
+    }
   }
 }
+
+export const usersService = new UsersServiceClass();

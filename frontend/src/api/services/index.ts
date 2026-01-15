@@ -1,3 +1,3 @@
-export * from "./auth/AuthService";
+export { authService, SignupPayload } from "./auth/AuthService";
 export { useAuth } from "./auth/useSession";
-export * from "./users/UsersService";
+export { usersService, User } from "./users/UsersService";

@@ -12,6 +12,18 @@ export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const token = request.cookies.get(AUTH_CONFIG.tokenKey)?.value;
 
+  if (pathname === "/") {
+    if (token) {
+      return NextResponse.redirect(
+        new URL(AUTH_CONFIG.defaultPath, request.url),
+      );
+    } else {
+      const loginUrl = new URL(AUTH_CONFIG.loginPath, request.url);
+      loginUrl.searchParams.set("callbackUrl", pathname);
+      return NextResponse.redirect(loginUrl);
+    }
+  }
+
   const isPublicRoute = AUTH_CONFIG.publicRoutes.includes(pathname);
 
   if (!token && !isPublicRoute) {

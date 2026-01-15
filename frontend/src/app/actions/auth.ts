@@ -1,6 +1,6 @@
 "use server";
 
-import { login as authLogin } from "@/src/api/services/auth/AuthService";
+import { authService } from "@/src/api";
 import { cookies } from "next/headers";
 
 export async function loginAction(formData: FormData) {
@@ -8,7 +8,7 @@ export async function loginAction(formData: FormData) {
   const password = formData.get("password") as string;
 
   try {
-    const { response } = await authLogin(email, password);
+    const { response } = await authService.login(email, password);
     const cookieStore = await cookies();
     cookieStore.set("access_token", response?.access_token || "", {
       httpOnly: true,

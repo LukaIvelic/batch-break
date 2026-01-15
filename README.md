@@ -11,6 +11,8 @@ batch_break/
 ├── backend/          # NestJS REST API
 ├── frontend/         # Next.js application
 ├── .husky/           # Git hooks for code quality
+├── start.bat         # Windows startup script
+├── start.sh          # Unix/macOS startup script
 └── package.json      # Root workspace configuration
 ```
 
@@ -21,10 +23,12 @@ batch_break/
 - **User Authentication** – JWT-based login and signup with session management
 - **Role-Based Access Control** – User roles with database-level relationships
 - **User Management** – Full CRUD operations for user accounts
-- **Dashboard** – Protected dashboard with sidebar navigation
+- **Dashboard** – Protected dashboard with collapsible sidebar navigation
+- **Theme Support** – Light/dark mode toggle with system preference detection
 - **API Documentation** – Swagger/OpenAPI integration
 - **Type Safety** – Full TypeScript support across the stack
 - **Code Quality** – Pre-commit hooks with Husky and lint-staged
+- **Dependency Analysis** – Knip integration for detecting unused dependencies
 
 ---
 
@@ -52,18 +56,20 @@ batch_break/
 | Tailwind CSS 4           | Styling               |
 | Radix UI                 | Accessible components |
 | Lucide React             | Icons                 |
+| next-themes              | Theme management      |
 | class-variance-authority | Component variants    |
 
 ### Development Tools
 
-| Tool         | Purpose               |
-| ------------ | --------------------- |
-| TypeScript 5 | Type safety           |
-| ESLint       | Linting               |
-| Prettier     | Code formatting       |
-| Husky        | Git hooks             |
-| lint-staged  | Pre-commit formatting |
-| Jest         | Testing (backend)     |
+| Tool         | Purpose                     |
+| ------------ | --------------------------- |
+| TypeScript 5 | Type safety                 |
+| ESLint       | Linting                     |
+| Prettier     | Code formatting             |
+| Husky        | Git hooks                   |
+| lint-staged  | Pre-commit formatting       |
+| Knip         | Unused dependency detection |
+| Jest         | Testing (backend)           |
 
 ---
 
@@ -121,7 +127,36 @@ API_ENDPOINT=http://localhost:8000
 
 ## ▶️ Running the Application
 
-### Backend
+### Quick Start (Recommended)
+
+Use the provided startup scripts to run both frontend and backend simultaneously:
+
+**Windows:**
+
+```bash
+# Development mode
+start.bat -d
+
+# Production mode
+start.bat
+```
+
+**Unix/macOS:**
+
+```bash
+# Make executable (first time only)
+chmod +x start.sh
+
+# Development mode
+./start.sh -d
+
+# Production mode
+./start.sh
+```
+
+### Manual Start
+
+#### Backend
 
 ```bash
 cd backend
@@ -138,7 +173,7 @@ The API will be available at `http://localhost:8000`
 
 Swagger documentation: `http://localhost:8000/api`
 
-### Frontend
+#### Frontend
 
 ```bash
 cd frontend
@@ -224,19 +259,23 @@ backend/src/
 ```
 frontend/src/
 ├── app/                       # Next.js App Router pages
+│   ├── actions/               # Server actions
 │   ├── login/                 # Login page
 │   ├── signup/                # Signup page
 │   └── dashboard/             # Protected dashboard
 ├── api/
 │   ├── config/                # API client configuration
+│   ├── responses/             # Response type definitions
 │   └── services/              # API service functions
 ├── components/
 │   ├── features/              # Reusable feature components
-│   ├── layout/                # Layout components (sidebar, header)
+│   ├── layout/                # Layout components (sidebar, header, footer)
 │   ├── pages/                 # Page-level components
-│   └── ui/                    # Base UI components
+│   ├── providers/             # React context providers (theme)
+│   └── ui/                    # Base UI components (Radix-based)
 ├── hooks/                     # Custom React hooks
-└── lib/                       # Utilities and types
+├── lib/                       # Utilities and configuration
+└── styles/                    # Component-specific CSS styles
 ```
 
 ---
@@ -245,9 +284,12 @@ frontend/src/
 
 ### Root
 
-| Command           | Description             |
-| ----------------- | ----------------------- |
-| `npm run prepare` | Install Husky git hooks |
+| Command           | Description                  |
+| ----------------- | ---------------------------- |
+| `npm run prepare` | Install Husky git hooks      |
+| `npm run knip`    | Detect unused dependencies   |
+| `start.bat`       | Start both apps (Windows)    |
+| `start.sh`        | Start both apps (Unix/macOS) |
 
 ### Backend
 
@@ -310,6 +352,41 @@ This project is **UNLICENSED** – private and proprietary.
 
 ---
 
+## � Troubleshooting
+
+### Common Issues
+
+**Port already in use**
+
+```bash
+# Check which process is using the port
+# Windows
+netstat -ano | findstr :8000
+
+# Unix/macOS
+lsof -i :8000
+```
+
+**Database connection errors**
+
+- Verify `DATABASE_URL` is correctly formatted
+- Ensure PostgreSQL server is running
+- Check network/firewall settings for Neon serverless
+
+**JWT authentication issues**
+
+- Ensure `JWT_SECRET` is set in the backend `.env`
+- Clear browser cookies and local storage
+- Verify token expiration settings
+
+**Frontend build errors**
+
+- Delete `node_modules` and `.next` folders, then reinstall
+- Ensure all environment variables are set
+- Check for TypeScript errors with `npm run lint`
+
+---
+
 ## 🔗 Related Documentation
 
 - [NestJS Documentation](https://docs.nestjs.com/)
@@ -317,3 +394,4 @@ This project is **UNLICENSED** – private and proprietary.
 - [TypeORM Documentation](https://typeorm.io/)
 - [Tailwind CSS Documentation](https://tailwindcss.com/docs)
 - [Radix UI Documentation](https://www.radix-ui.com/docs)
+- [Neon Serverless PostgreSQL](https://neon.tech/docs)

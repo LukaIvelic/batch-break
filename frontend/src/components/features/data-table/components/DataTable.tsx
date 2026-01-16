@@ -79,7 +79,7 @@ export function DataTable<TData, TValue>({
   const isServerSearch = !!onSearch;
 
   const globalFilterFn: FilterFn<TData> = React.useCallback(
-    (row, columnId, filterValue) => {
+    (row, filterValue) => {
       if (
         isServerSearch ||
         !searchableColumns ||
@@ -143,12 +143,19 @@ export function DataTable<TData, TValue>({
         }
       />
       <div className="rounded-md border">
-        <Table>
+        <Table style={{ tableLayout: "fixed", width: "100%" }}>
           <TableHeader className="bg-muted/50">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
-                  <TableHead key={header.id}>
+                  <TableHead
+                    key={header.id}
+                    style={{
+                      width: header.getSize(),
+                      minWidth: header.column.columnDef.minSize,
+                      maxWidth: header.column.columnDef.maxSize,
+                    }}
+                  >
                     {header.isPlaceholder
                       ? null
                       : flexRender(
@@ -181,7 +188,17 @@ export function DataTable<TData, TValue>({
                     style={{ height: `${ROW_HEIGHT}px` }}
                   >
                     {row.getVisibleCells().map((cell) => (
-                      <TableCell key={cell.id}>
+                      <TableCell
+                        key={cell.id}
+                        style={{
+                          width: cell.column.getSize(),
+                          minWidth: cell.column.columnDef.minSize,
+                          maxWidth: cell.column.columnDef.maxSize,
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                          whiteSpace: "nowrap",
+                        }}
+                      >
                         {flexRender(
                           cell.column.columnDef.cell,
                           cell.getContext(),
@@ -197,8 +214,15 @@ export function DataTable<TData, TValue>({
                     key={`empty-${index}`}
                     style={{ height: `${ROW_HEIGHT}px` }}
                   >
-                    {columns.map((_, colIndex) => (
-                      <TableCell key={`empty-cell-${colIndex}`}>
+                    {columns.map((col, colIndex) => (
+                      <TableCell
+                        key={`empty-cell-${colIndex}`}
+                        style={{
+                          width: col.size,
+                          minWidth: col.minSize,
+                          maxWidth: col.maxSize,
+                        }}
+                      >
                         &nbsp;
                       </TableCell>
                     ))}

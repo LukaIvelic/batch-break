@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { satoshi } from "../lib/config/satoshi";
-import { ThemeProvider } from "@/src/components/providers";
+import { ThemeProvider, QueryProvider } from "@/src/components/providers";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -16,14 +16,16 @@ export default function RootLayout({ children }: Readonly<RootLayoutProps>) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${satoshi.variable} antialiased h-full`}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          {children}
-        </ThemeProvider>
+        <QueryProvider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            {children}
+          </ThemeProvider>
+        </QueryProvider>
       </body>
     </html>
   );

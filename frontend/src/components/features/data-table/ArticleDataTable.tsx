@@ -2,61 +2,56 @@
 
 import { DataTable } from "./components/DataTable";
 import { articleColumns } from "./columns/ArticleColumns";
-import { Article, PaginationMeta } from "@/src/types";
-import { useEffect, useState, useCallback, useRef } from "react";
-import { articleService } from "@/src/api/services/articles/ArticleService";
+import { useState, useRef, useEffect, useMemo } from "react";
+import { useArticles } from "@/src/hooks/useArticles";
 
 export function ArticleDataTable() {
-  const [articles, setArticles] = useState<Article[]>([]);
-  const [pagination, setPagination] = useState<PaginationMeta>({
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(10);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
+  const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const idPadStartDigits = 7;
+
+  const params = useMemo(
+    () => ({
+      page,
+      limit,
+      search: debouncedSearch || undefined,
+    }),
+    [page, limit, debouncedSearch],
+  );
+
+  const { data, isLoading } = useArticles(params);
+
+  const articles = useMemo(() => {
+    if (!data?.data) return [];
+    return data.data.map((article) => ({
+      ...article,
+      id: article.id.toString().padStart(idPadStartDigits, "0"),
+      lastModified: article.lastModified
+        ? new Date(article.lastModified).toLocaleDateString("en-GB")
+        : "-",
+      createdAt: new Date(article.createdAt).toLocaleDateString("en-GB"),
+    }));
+  }, [data]);
+
+  const pagination = data?.meta ?? {
     total: 0,
     page: 1,
     limit: 10,
     totalPages: 0,
     hasNextPage: false,
     hasPreviousPage: false,
-  });
-  const [isLoading, setIsLoading] = useState(false);
-  const [searchTerm, setSearchTerm] = useState("");
-  const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const idPadStartDigits = 7;
+  };
 
-  const fetchArticles = useCallback(
-    async (page: number, limit: number, search?: string) => {
-      setIsLoading(true);
-      try {
-        const response = await articleService.getAll({
-          page,
-          limit,
-          search: search || undefined,
-        });
-        const formattedArticles = response.data.map((article) => ({
-          ...article,
-          id: article.id.toString().padStart(idPadStartDigits, "0"),
-          lastModified: article.lastModified
-            ? new Date(article.lastModified).toLocaleDateString("en-GB")
-            : "-",
-          createdAt: new Date(article.createdAt).toLocaleDateString("en-GB"),
-        }));
-        setArticles(formattedArticles);
-        setPagination(response.meta);
-      } finally {
-        setIsLoading(false);
-      }
-    },
-    [],
-  );
-
-  useEffect(() => {
-    fetchArticles(1, 10);
-  }, [fetchArticles]);
-
-  const handlePageChange = (page: number) => {
-    fetchArticles(page, pagination.limit, searchTerm);
+  const handlePageChange = (newPage: number) => {
+    setPage(newPage);
   };
 
   const handlePageSizeChange = (pageSize: number) => {
-    fetchArticles(1, pageSize, searchTerm);
+    setLimit(pageSize);
+    setPage(1);
   };
 
   const handleSearch = (search: string) => {
@@ -67,7 +62,8 @@ export function ArticleDataTable() {
     }
 
     searchTimeoutRef.current = setTimeout(() => {
-      fetchArticles(1, pagination.limit, search);
+      setDebouncedSearch(search);
+      setPage(1);
     }, 300);
   };
 

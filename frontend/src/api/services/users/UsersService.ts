@@ -2,7 +2,7 @@ import { User } from "@/src/types";
 import { api, endpoints } from "../../config";
 import { NestResponse } from "../../responses/response";
 
-class UsersServiceClass {
+class UsersService {
   async getAll(): Promise<User[]> {
     const res = await api.get<NestResponse<User[]>>(endpoints.users.base, {
       cache: "no-store",
@@ -63,4 +63,4 @@ class UsersServiceClass {
   }
 }
 
-export const usersService = new UsersServiceClass();
+export const usersService = new UsersService();

@@ -1,3 +1,5 @@
+import { exists } from "fs";
+
 export const API_BASE_URL = process.env.API_ENDPOINT || "http://localhost:8000";
 
 export const endpoints = {
@@ -11,5 +13,9 @@ export const endpoints = {
     exists: (email: string) =>
       `/users/exists?email=${encodeURIComponent(email)}`,
     findByEmail: (email: string) => `/users?email=${encodeURIComponent(email)}`,
+  },
+  articles: {
+    base: "/articles",
+    byId: (id: string) => `/articles/${id}`,
   },
 };

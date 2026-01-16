@@ -76,8 +76,8 @@ export const sidebarConfig = {
       title: "Management",
       icon: Users,
       items: [
-        { title: "Manage employees", url: "/dashboard/team/employees" },
-        { title: "Manage roles", url: "/dashboard/team/roles" },
+        { title: "Manage employees", url: "/dashboard/management/employees" },
+        { title: "Manage roles", url: "/dashboard/management/roles" },
       ],
     },
   ] as SidebarMenuItem[],

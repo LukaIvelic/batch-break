@@ -62,7 +62,6 @@ export function ArticleDataTable() {
   const handleSearch = (search: string) => {
     setSearchTerm(search);
 
-    // Debounce search requests
     if (searchTimeoutRef.current) {
       clearTimeout(searchTimeoutRef.current);
     }
@@ -72,7 +71,6 @@ export function ArticleDataTable() {
     }, 300);
   };
 
-  // Cleanup timeout on unmount
   useEffect(() => {
     return () => {
       if (searchTimeoutRef.current) {

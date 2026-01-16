@@ -73,7 +73,9 @@ export function DataTable<TData, TValue>({
   const [rowSelection, setRowSelection] = React.useState({});
   const [globalFilter, setGlobalFilter] = React.useState("");
 
-  // Use server search if onSearch is provided, otherwise use client-side filtering
+  const ROW_HEIGHT = 53;
+  const pageSize = serverPagination?.limit ?? 10;
+
   const isServerSearch = !!onSearch;
 
   const globalFilterFn: FilterFn<TData> = React.useCallback(
@@ -158,36 +160,57 @@ export function DataTable<TData, TValue>({
               </TableRow>
             ))}
           </TableHeader>
-          <TableBody>
+          <TableBody style={{ minHeight: `${ROW_HEIGHT * pageSize}px` }}>
             {isLoading ? (
               <TableRow>
-                <TableCell colSpan={columns.length} className="h-24">
-                  <div className="flex justify-center items-center gap-2">
+                <TableCell
+                  colSpan={columns.length}
+                  style={{ height: `${ROW_HEIGHT * pageSize}px` }}
+                >
+                  <div className="flex justify-center items-center gap-2 h-full">
                     <Spinner /> Loading
                   </div>
                 </TableCell>
               </TableRow>
             ) : table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext(),
-                      )}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))
+              <>
+                {table.getRowModel().rows.map((row) => (
+                  <TableRow
+                    key={row.id}
+                    data-state={row.getIsSelected() && "selected"}
+                    style={{ height: `${ROW_HEIGHT}px` }}
+                  >
+                    {row.getVisibleCells().map((cell) => (
+                      <TableCell key={cell.id}>
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext(),
+                        )}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))}
+                {Array.from({
+                  length: pageSize - table.getRowModel().rows.length,
+                }).map((_, index) => (
+                  <TableRow
+                    key={`empty-${index}`}
+                    style={{ height: `${ROW_HEIGHT}px` }}
+                  >
+                    {columns.map((_, colIndex) => (
+                      <TableCell key={`empty-cell-${colIndex}`}>
+                        &nbsp;
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))}
+              </>
             ) : (
               <TableRow>
                 <TableCell
                   colSpan={columns.length}
-                  className="h-24 text-center"
+                  className="text-center"
+                  style={{ height: `${ROW_HEIGHT * pageSize}px` }}
                 >
                   No results.
                 </TableCell>

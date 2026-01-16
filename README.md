@@ -120,7 +120,7 @@ npm install
 Create a `.env` file in the `frontend/` directory (optional):
 
 ```env
-API_ENDPOINT=http://localhost:8000
+NEXT_PUBLIC_API_URL=http://localhost:8000
 ```
 
 ---
@@ -324,9 +324,9 @@ frontend/src/
 
 ### Frontend
 
-| Variable       | Required | Description                                        |
-| -------------- | -------- | -------------------------------------------------- |
-| `API_ENDPOINT` | No       | Backend API URL (default: `http://localhost:8000`) |
+| Variable              | Required | Description                                        |
+| --------------------- | -------- | -------------------------------------------------- |
+| `NEXT_PUBLIC_API_URL` | No       | Backend API URL (default: `http://localhost:8000`) |
 
 ---
 

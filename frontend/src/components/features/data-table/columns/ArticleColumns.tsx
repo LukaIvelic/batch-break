@@ -4,8 +4,13 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Checkbox } from "@/src/components/ui/checkbox";
 import { DataTableRowActions } from "../components/DataTableRowActions";
 import { Article } from "@/src/types";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/src/components/ui/tooltip";
 
-const truncate = (str: string, maxLength: number) => {
+const truncate = (str: string | undefined | null, maxLength: number) => {
   if (!str) return "";
   return str.length > maxLength ? `${str.slice(0, maxLength)}…` : str;
 };
@@ -59,9 +64,14 @@ export const articleColumns: ColumnDef<Article>[] = [
     minSize: 180,
     maxSize: 180,
     cell: ({ row }) => (
-      <span title={row.getValue("name")}>
-        {truncate(row.getValue("name"), 15)}
-      </span>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <span>{truncate(row.getValue("name"), 15)}</span>
+        </TooltipTrigger>
+        <TooltipContent>
+          <p>{row.getValue("name")}</p>
+        </TooltipContent>
+      </Tooltip>
     ),
   },
   {
@@ -71,9 +81,14 @@ export const articleColumns: ColumnDef<Article>[] = [
     minSize: 130,
     maxSize: 130,
     cell: ({ row }) => (
-      <span title={row.getValue("manufacturer")}>
-        {truncate(row.getValue("manufacturer"), 15)}
-      </span>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <span>{truncate(row.getValue("manufacturer"), 15)}</span>
+        </TooltipTrigger>
+        <TooltipContent>
+          <p>{row.getValue("manufacturer")}</p>
+        </TooltipContent>
+      </Tooltip>
     ),
   },
   {

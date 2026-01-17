@@ -142,9 +142,9 @@ export function DataTable<TData, TValue>({
           (!!searchableColumns && searchableColumns.length > 0)
         }
       />
-      <div className="rounded-md border">
+      <div className="rounded-md border max-h-[60vh] overflow-y-auto relative">
         <Table style={{ tableLayout: "fixed", width: "100%" }}>
-          <TableHeader className="bg-muted/50">
+          <TableHeader className="bg-muted sticky top-0 z-10">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (

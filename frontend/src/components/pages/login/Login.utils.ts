@@ -2,70 +2,75 @@ import { usersService } from "@/src/api";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { FormEvent, useState } from "react";
 
-const handleLoginEmail = async (
-  event: FormEvent<HTMLFormElement>,
-  setIsLoading: (loading: boolean) => void,
-  router?: AppRouterInstance,
-  emailRef?: React.RefObject<HTMLInputElement | null>,
-) => {
-  event.preventDefault();
-
-  const email = emailRef?.current?.value;
-
-  if (!email || !router) {
-    emailRef?.current?.classList.add("!border-red-500");
-    emailRef?.current?.focus();
-    return;
-  }
-
-  try {
-    setIsLoading(true);
-    const isInDb = await usersService.exists(email);
-    const target = isInDb ? "/login/email" : "/signup";
-    router.push(`${target}?email=${encodeURIComponent(email)}`);
-  } catch (error) {
-    console.error(error);
-  } finally {
-    setIsLoading(false);
-  }
-};
-
-const handleLoginGoogle = (
-  router?: AppRouterInstance,
-  googleRef?: React.RefObject<HTMLButtonElement | null>,
-) => {
-  // Implement login logic here
-};
-
-const handleLoginGithub = (
-  router?: AppRouterInstance,
-  githubRef?: React.RefObject<HTMLButtonElement | null>,
-) => {
-  // Implement login logic here
-};
-
-interface useLoginUtilsProps {
+interface UseLoginUtilsProps {
   router?: AppRouterInstance;
   googleRef?: React.RefObject<HTMLButtonElement | null>;
   githubRef?: React.RefObject<HTMLButtonElement | null>;
   emailRef?: React.RefObject<HTMLInputElement | null>;
 }
 
-const useLoginUtils = ({
+const markInvalid = (ref?: React.RefObject<HTMLElement | null>) => {
+  ref?.current?.classList.add("!border-red-500");
+  ref?.current?.focus();
+};
+
+export const useLoginUtils = ({
   router,
   googleRef,
   githubRef,
   emailRef,
-}: useLoginUtilsProps) => {
+}: UseLoginUtilsProps) => {
   const [isLoading, setIsLoading] = useState(false);
+
+  const handleLoginEmail = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (!router) return;
+
+    const email = emailRef?.current?.value;
+    if (!email) {
+      markInvalid(emailRef);
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      const exists = await usersService.exists(email);
+      const target = exists ? "/login/email" : "/signup";
+      router.push(`${target}?email=${encodeURIComponent(email)}`);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleSignup = async () => {
+    if (!router) return;
+
+    try {
+      setIsLoading(true);
+      router.push("/signup");
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleLoginGoogle = () => {
+    // OAuth logic here
+  };
+
+  const handleLoginGithub = () => {
+    // OAuth logic here
+  };
 
   return {
     isLoading,
-    handleLoginEmail: (e: FormEvent<HTMLFormElement>) =>
-      handleLoginEmail(e, setIsLoading, router, emailRef),
-    handleLoginGoogle: () => handleLoginGoogle(router, googleRef),
-    handleLoginGithub: () => handleLoginGithub(router, githubRef),
+    handleLoginEmail,
+    handleSignup,
+    handleLoginGoogle,
+    handleLoginGithub,
   };
 };
-
-export { useLoginUtils };

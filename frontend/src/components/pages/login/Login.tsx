@@ -7,15 +7,21 @@ import { useRouter } from "next/navigation";
 import { useEffect, useRef } from "react";
 import { FooterLinks } from "../../features/footer-links/FooterLinks";
 import { cn } from "@/lib/utils";
+import { AtSign } from "lucide-react";
 
 export function Login() {
   const router = useRouter();
   const emailRef = useRef<HTMLInputElement>(null);
-  const { handleLoginEmail, handleLoginGoogle, handleLoginGithub, isLoading } =
-    useLoginUtils({
-      router,
-      emailRef,
-    });
+  const {
+    handleSignup,
+    handleLoginEmail,
+    handleLoginGoogle,
+    handleLoginGithub,
+    isLoading,
+  } = useLoginUtils({
+    router,
+    emailRef,
+  });
 
   useEffect(() => {
     emailRef.current?.focus();
@@ -63,6 +69,13 @@ export function Login() {
             onClick={handleLoginGithub}
           >
             Continue with GitHub
+          </Button>
+          <Button
+            className={cn(`hover:bg-foreground/10 hover:border-foreground/10`)}
+            onClick={handleSignup}
+            icon={AtSign}
+          >
+            Continue to Sign up
           </Button>
         </div>
         <FooterLinks />

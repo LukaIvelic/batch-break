@@ -1,5 +1,8 @@
+"use client";
+
 import { cn } from "@/lib/utils";
-import { ArticleDataTable, Subtitle, Title } from "@/src/components/features";
+import { Subtitle, Title } from "@/src/components/features";
+import { ArticleDataTable } from "@/src/components/features/tables/article-data-table/ArticleDataTable";
 
 export default function ArticlePage() {
   return (

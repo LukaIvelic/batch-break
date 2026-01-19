@@ -10,7 +10,7 @@ export function DataTableHeader<T>(props: DataTableHeader<T>) {
   const headerGroups = table.getHeaderGroups();
 
   return (
-    <TableHeader className="bg-muted/50">
+    <TableHeader>
       {headerGroups.map((headerGroup) => {
         const headers = headerGroup.headers;
 
@@ -22,7 +22,10 @@ export function DataTableHeader<T>(props: DataTableHeader<T>) {
               const headerContext = header.getContext();
 
               return (
-                <TableHead key={header.id}>
+                <TableHead
+                  key={header.id}
+                  style={{ width: header.column.getSize() }}
+                >
                   {!isPlaceholder && flexRender(columnHeader, headerContext)}
                 </TableHead>
               );

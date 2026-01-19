@@ -1,32 +1,51 @@
-import { useSearchParams } from "next/navigation";
+"use client";
+
 import { DataTable } from "../../data-table/DataTable";
 import { columns } from "./ArticleDataTableColumns";
 import { ColumnDef } from "@tanstack/react-table";
 import { Article } from "@/src/types";
 import { articleService } from "@/src/api/services/articles/ArticleService";
 import { useQuery } from "@tanstack/react-query";
+import { useState, useEffect } from "react";
 
 export function ArticleDataTable() {
-  const searchParams = useSearchParams();
-  const page = parseInt(searchParams.get("page") || "1");
-  const limit = parseInt(searchParams.get("limit") || "20");
-
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ["articles", page, limit],
-    queryFn: () => articleService.getAll({ limit: limit, page: page }),
+  const [pagination, setPagination] = useState({
+    pageIndex: 0,
+    pageSize: 30,
   });
 
+  const { data, isLoading } = useQuery({
+    queryKey: ["articles", pagination.pageIndex, pagination.pageSize],
+    queryFn: () =>
+      articleService.getAll({
+        limit: pagination.pageSize,
+        page: pagination.pageIndex,
+      }),
+  });
+
+  const [lastMeta, setLastMeta] = useState({ total: 0, totalPages: 0 });
+
+  useEffect(() => {
+    if (data?.meta) {
+      //eslint-disable-next-line
+      setLastMeta(data.meta);
+    }
+  }, [data?.meta]);
+
   const articles = data?.data || [];
-  const pageCount = data?.meta.totalPages || 0;
-  const rowCount = data?.meta.total || 0;
+  const rowCount = data?.meta?.total ?? lastMeta.total;
+  const pageCount = data?.meta?.totalPages ?? lastMeta.totalPages;
 
   return (
     <DataTable
       data={articles}
       columns={columns as ColumnDef<Article, unknown>[]}
-      pageCount={pageCount}
       rowCount={rowCount}
+      pageCount={pageCount}
       isLoading={isLoading}
+      tableId="articles"
+      pagination={pagination}
+      setPagination={setPagination}
     />
   );
 }

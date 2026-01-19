@@ -1,21 +1,15 @@
 import { Button } from "@/src/components/ui/button";
 import { Checkbox } from "@/src/components/ui/checkbox";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/src/components/ui/dropdown-menu";
 import { Article } from "@/src/types";
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown, MoreHorizontal } from "lucide-react";
+import { ArrowUpDown } from "lucide-react";
+import { TruncatedText } from "../../truncated-text/TruncatedText";
+import { ArticleActionCell } from "./ArticleActionCell";
 
 export const columns: ColumnDef<Article>[] = [
   {
     id: "select",
-    size: 50,
+    size: 25,
     header: ({ table }) => (
       <Checkbox
         checked={
@@ -38,13 +32,13 @@ export const columns: ColumnDef<Article>[] = [
   },
   {
     accessorKey: "article_id",
-    size: 120,
+    size: 90,
     header: "Article ID",
     cell: ({ row }) => <div>{row.getValue("article_id")}</div>,
   },
   {
     accessorKey: "name",
-    size: 200,
+    size: 250,
     header: ({ column }) => {
       return (
         <Button
@@ -56,19 +50,25 @@ export const columns: ColumnDef<Article>[] = [
         </Button>
       );
     },
-    cell: ({ row }) => <div>{row.getValue("name")}</div>,
+    cell: ({ row }) => (
+      <TruncatedText maxLength={30}>{row.getValue("name")}</TruncatedText>
+    ),
   },
   {
     accessorKey: "manufacturer",
-    size: 150,
+    size: 180,
     header: "Manufacturer",
     cell: ({ row }) => <div>{row.getValue("manufacturer") || "-"}</div>,
   },
   {
     accessorKey: "category",
-    size: 120,
+    size: 80,
     header: "Category",
-    cell: ({ row }) => <div>{row.getValue("category") || "-"}</div>,
+    cell: ({ row }) => (
+      <TruncatedText maxLength={10}>
+        {row.getValue("category") || "-"}
+      </TruncatedText>
+    ),
   },
   {
     accessorKey: "price",
@@ -87,37 +87,18 @@ export const columns: ColumnDef<Article>[] = [
   },
   {
     accessorKey: "scanned",
-    size: 100,
+    size: 70,
     header: "Scanned",
     cell: ({ row }) => <div>{row.getValue("scanned")}</div>,
   },
   {
     id: "actions",
-    size: 80,
+    size: 60,
     enableHiding: false,
     cell: ({ row }) => {
       const article = row.original;
 
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(article.article_id)}
-            >
-              Copy Article ID
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>View details</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
+      return <ArticleActionCell article={article} />;
     },
   },
 ];

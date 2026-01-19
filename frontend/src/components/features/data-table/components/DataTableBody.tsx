@@ -14,7 +14,7 @@ export function DataTableBody<T>(props: DataTableBody<T>) {
 
   if (isLoading) {
     return (
-      <TableBody className="h-[60vh]">
+      <TableBody className="h-[40vh]">
         <TableRow>
           <TableCell colSpan={columns.length} className="h-full relative">
             <div className="flex items-center justify-center">
@@ -47,7 +47,7 @@ export function DataTableBody<T>(props: DataTableBody<T>) {
       {rows.map((row) => (
         <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
           {row.getVisibleCells().map((cell) => (
-            <TableCell key={cell.id}>
+            <TableCell key={cell.id} style={{ width: cell.column.getSize() }}>
               {flexRender(cell.column.columnDef.cell, cell.getContext())}
             </TableCell>
           ))}

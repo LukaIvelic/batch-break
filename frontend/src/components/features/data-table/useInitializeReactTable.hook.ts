@@ -4,32 +4,33 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
+  type ColumnDef,
   type ColumnFiltersState,
   type SortingState,
   type VisibilityState,
-  type Updater,
+  type PaginationState,
+  type OnChangeFn,
 } from "@tanstack/react-table";
 
 interface UseReactTableProps<TData> {
   data: TData[];
-  columns: any; //eslint-disable-line
+  columns: ColumnDef<TData, unknown>[];
 
   sorting: SortingState;
   columnFilters: ColumnFiltersState;
   columnVisibility: VisibilityState;
-  rowSelection: {}; //eslint-disable-line
+  rowSelection: Record<string, boolean>;
 
   pageCount?: number;
   rowCount?: number;
-  pagination?: {
-    pageIndex: number;
-    pageSize: number;
-  };
+  pagination?: PaginationState;
 
-  setSorting: (updater: Updater<SortingState>) => void;
-  setColumnFilters: (updater: Updater<ColumnFiltersState>) => void;
-  setColumnVisibility: (updater: Updater<VisibilityState>) => void;
-  setRowSelection: (updater: {}) => void; //eslint-disable-line
+  setSorting: OnChangeFn<SortingState>;
+  setColumnFilters: OnChangeFn<ColumnFiltersState>;
+  setColumnVisibility: OnChangeFn<VisibilityState>;
+  setRowSelection: OnChangeFn<Record<string, boolean>>;
+  onPaginationChange?: OnChangeFn<PaginationState>;
+  manualPagination?: boolean;
 }
 
 export function useInitializeReactTable<TData>({
@@ -46,17 +47,21 @@ export function useInitializeReactTable<TData>({
   setColumnFilters,
   setColumnVisibility,
   setRowSelection,
+  onPaginationChange,
+  manualPagination,
 }: UseReactTableProps<TData>) {
+  // eslint-disable-next-line react-hooks/incompatible-library
   return useReactTable({
     data,
     columns,
-    pageCount: pageCount ?? -1,
+    pageCount,
     rowCount,
-    manualPagination: !!pageCount,
+    manualPagination: manualPagination,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
+    onPaginationChange: onPaginationChange,
 
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
@@ -69,13 +74,6 @@ export function useInitializeReactTable<TData>({
       columnVisibility,
       rowSelection,
       pagination,
-    },
-
-    initialState: {
-      pagination: {
-        pageSize: 20,
-        pageIndex: 0,
-      },
     },
   });
 }

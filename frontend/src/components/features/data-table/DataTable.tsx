@@ -1,6 +1,5 @@
 "use client";
 
-import * as React from "react";
 import { Table } from "@/src/components/ui/table";
 import { DataTableSearch } from "./components/DataTableSearch";
 import { DataTableColumnVisibility } from "./components/DataTableColumnVisibility";
@@ -8,60 +7,68 @@ import { DataTableHeader } from "./components/DataTableHeader";
 import { DataTableBody } from "./components/DataTableBody";
 import { DataTablePagination } from "./components/DataTablePagination/DataTablePagination";
 import { useInitializeReactTable } from "./useInitializeReactTable.hook";
-import { useSearchParams } from "next/navigation";
 import {
   type ColumnDef,
   type ColumnFiltersState,
   type SortingState,
   type VisibilityState,
+  type PaginationState,
+  type OnChangeFn,
 } from "@tanstack/react-table";
+import { useState } from "react";
 
-interface DataTableProps {
-  data: unknown[];
-  columns: ColumnDef<any, any>[]; //eslint-disable-line
-  pageCount?: number;
+interface DataTableProps<TData> {
+  data: TData[];
+  columns: ColumnDef<TData, unknown>[];
   rowCount?: number;
+  pageCount?: number;
+  pagination?: PaginationState;
+  setPagination?: OnChangeFn<PaginationState>;
   isLoading?: boolean;
+  tableId?: string;
 }
 
-export function DataTable(props: DataTableProps) {
-  const { data, columns, pageCount, rowCount, isLoading } = props;
-  const [sorting, setSorting] = React.useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    [],
-  );
-  const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({});
-  const [rowSelection, setRowSelection] = React.useState({});
+export function DataTable<TData>(props: DataTableProps<TData>) {
+  const {
+    data,
+    columns,
+    pageCount,
+    rowCount,
+    isLoading,
+    pagination,
+    setPagination,
+  } = props;
 
-  const searchParams = useSearchParams();
-  const page = parseInt(searchParams.get("page") || "1");
-  const limit = parseInt(searchParams.get("limit") || "20");
-  const pageIndex = page - 1;
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+  const [rowSelection, setRowSelection] = useState<Record<string, boolean>>({});
 
   const table = useInitializeReactTable({
     data,
     columns,
     pageCount,
     rowCount,
-    pagination: { pageIndex, pageSize: limit },
     sorting,
     columnFilters,
     columnVisibility,
     rowSelection,
+    pagination,
     setSorting,
     setColumnFilters,
     setColumnVisibility,
     setRowSelection,
+    onPaginationChange: setPagination,
+    manualPagination: true,
   });
 
   return (
-    <div className="w-full">
+    <div className="w-full flex flex-col h-[60vh]">
       <div className="flex items-center py-4">
         <DataTableSearch placeholder="Search..." table={table} />
         <DataTableColumnVisibility table={table} />
       </div>
-      <div className="overflow-y-auto rounded-md border h-[60vh]">
+      <div className="overflow-y-auto rounded-md border flex-1">
         <Table>
           <DataTableHeader table={table} />
           <DataTableBody
@@ -71,7 +78,7 @@ export function DataTable(props: DataTableProps) {
           />
         </Table>
       </div>
-      <DataTablePagination table={table} />
+      <DataTablePagination table={table} isLoading={isLoading} />
     </div>
   );
 }

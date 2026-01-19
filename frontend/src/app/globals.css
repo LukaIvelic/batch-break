@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "tw-animate-css";
 
 @import "../styles/ButtonStyles.css";
 @import "../styles/TextInputStyles.css";
@@ -46,9 +47,14 @@
   --radius-4xl: calc(var(--radius) + 16px);
 }
 
-html,
+html {
+  height: 100%;
+  overflow: hidden;
+}
+
 body {
   height: 100%;
+  overflow-y: auto;
 }
 
 body {
@@ -128,6 +134,7 @@ body {
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }

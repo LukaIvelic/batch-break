@@ -8,69 +8,71 @@ import {
   ChevronsLeft,
   ChevronsRight,
 } from "lucide-react";
-import { usePaginationUtils } from "./DataTablePagination.utils";
 
 interface DataTablePaginationProps<T> {
   table: Table<T>;
+  isLoading?: boolean;
 }
 
-export function DataTablePagination<T>({ table }: DataTablePaginationProps<T>) {
-  const { pageIndex, pageSize } = table.getState().pagination;
-  const rowCount = table.getRowCount();
-  const start = pageIndex * pageSize + 1;
-  const end = Math.min((pageIndex + 1) * pageSize, rowCount);
-
-  const { actions, disabled } = usePaginationUtils(table);
-
-  const buttons: {
-    key: string;
-    icon: React.ReactNode;
-    onClick: () => void;
-    disabled: boolean;
-  }[] = [
-    {
-      key: "first",
-      icon: <ChevronsLeft />,
-      onClick: actions.first,
-      disabled: disabled.first,
-    },
-    {
-      key: "prev",
-      icon: <ChevronLeft />,
-      onClick: actions.prev,
-      disabled: disabled.prev,
-    },
-    {
-      key: "next",
-      icon: <ChevronRight />,
-      onClick: actions.next,
-      disabled: disabled.next,
-    },
-    {
-      key: "last",
-      icon: <ChevronsRight />,
-      onClick: actions.last,
-      disabled: disabled.last,
-    },
-  ];
+export function DataTablePagination<T>({
+  table,
+  isLoading,
+}: DataTablePaginationProps<T>) {
+  const selectedCount = table.getFilteredSelectedRowModel().rows.length;
+  const totalRowOnPage = table.getFilteredRowModel().rows.length;
 
   return (
-    <div className="flex items-center justify-end space-x-2 py-4">
-      <div className="text-muted-foreground flex-1 text-sm">
-        {!start || !end || !rowCount ? "" : `${start} to ${end} of ${rowCount}`}
+    <div className="flex items-center justify-between px-2 py-4">
+      <div className="flex-1 text-sm text-muted-foreground min-w-[200px]">
+        {totalRowOnPage > 0 && !isLoading && (
+          <>
+            {selectedCount} of {totalRowOnPage} row(s) selected.
+          </>
+        )}
       </div>
-      <div className="space-x-2">
-        {buttons.map(({ key, icon, onClick, disabled }) => (
+      <div className="flex items-center space-x-6 lg:space-x-8">
+        <div className="flex w-[100px] items-center justify-center text-sm font-medium">
+          Page {table.getState().pagination.pageIndex + 1} of{" "}
+          {table.getPageCount() > 0 ? table.getPageCount() : 1}
+        </div>
+        <div className="flex items-center space-x-2">
           <Button
-            key={key}
             variant="outline"
-            size="sm"
-            onClick={onClick}
-            disabled={disabled}
+            className="hidden h-8 w-8 p-0 lg:flex"
+            onClick={() => table.setPageIndex(0)}
+            disabled={!table.getCanPreviousPage() || isLoading}
           >
-            {icon}
+            <span className="sr-only">Go to first page</span>
+            <ChevronsLeft className="h-4 w-4" />
           </Button>
-        ))}
+          <Button
+            variant="outline"
+            className="h-8 w-8 p-0"
+            onClick={() => table.previousPage()}
+            disabled={!table.getCanPreviousPage() || isLoading}
+          >
+            <span className="sr-only">Go to previous page</span>
+            <ChevronLeft className="h-4 w-4" />
+          </Button>
+          <Button
+            variant="outline"
+            className="h-8 w-8 p-0"
+            onClick={() => table.nextPage()}
+            disabled={!table.getCanNextPage() || isLoading}
+          >
+            <span className="sr-only">Go to next page</span>
+            <ChevronRight className="h-4 w-4" />
+          </Button>
+          <Button
+            variant="outline"
+            className="hidden h-8 w-8 p-0 lg:flex"
+            onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+            disabled={!table.getCanNextPage() || isLoading}
+          >
+            <span className="sr-only">Go to last page</span>
+            <ChevronsRight className="h-4 w-4" />
+          </Button>
+        </div>
       </div>
     </div>
   );

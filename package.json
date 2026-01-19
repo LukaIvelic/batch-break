@@ -22,5 +22,8 @@
       "prettier --write"
     ],
     "**/*.{json,css,md}": "prettier --write"
+  },
+  "dependencies": {
+    "zustand": "^5.0.10"
   }
 }

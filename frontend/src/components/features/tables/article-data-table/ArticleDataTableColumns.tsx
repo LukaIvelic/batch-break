@@ -37,6 +37,12 @@ export const columns: ColumnDef<Article>[] = [
     cell: ({ row }) => <div>{row.getValue("article_id")}</div>,
   },
   {
+    accessorKey: "barcode",
+    size: 130,
+    header: "Barcode",
+    cell: ({ row }) => <div>{row.getValue("barcode")}</div>,
+  },
+  {
     accessorKey: "name",
     size: 250,
     header: ({ column }) => {
@@ -51,7 +57,7 @@ export const columns: ColumnDef<Article>[] = [
       );
     },
     cell: ({ row }) => (
-      <TruncatedText maxLength={30}>{row.getValue("name")}</TruncatedText>
+      <TruncatedText maxLength={25}>{row.getValue("name")}</TruncatedText>
     ),
   },
   {
@@ -76,13 +82,7 @@ export const columns: ColumnDef<Article>[] = [
     header: () => <div className="text-right">Price</div>,
     cell: ({ row }) => {
       const price = parseFloat(row.getValue("price"));
-
-      const formatted = new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency: "USD",
-      }).format(price);
-
-      return <div className="text-right font-medium">{formatted}</div>;
+      return <div className="text-right font-medium">€{price}</div>;
     },
   },
   {
@@ -96,9 +96,9 @@ export const columns: ColumnDef<Article>[] = [
     size: 60,
     enableHiding: false,
     cell: ({ row }) => {
-      const article = row.original;
-
-      return <ArticleActionCell article={article} />;
+      const { price, ...article } = row.original;
+      const articleData = { ...article, price: parseFloat(price.toString()) };
+      return <ArticleActionCell article={articleData} />;
     },
   },
 ];

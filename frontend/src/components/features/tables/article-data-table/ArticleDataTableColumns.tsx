@@ -5,6 +5,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
 import { TruncatedText } from "../../truncated-text/TruncatedText";
 import { ArticleActionCell } from "./ArticleActionCell";
+import { useAuth } from "@/src/api/services";
 
 export const columns: ColumnDef<Article>[] = [
   {

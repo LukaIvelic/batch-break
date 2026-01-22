@@ -1,0 +1,477 @@
+{
+  "info": {
+    "_postman_id": "b693e523-11fd-4e02-b194-53f34bee5f26",
+    "name": "Batch Break API",
+    "description": "API collection for Batch Break - a NestJS application with authentication, users, and articles management.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login",
+          "id": "093bed69-b680-44c2-80ab-9f0715ec6876",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8000/api/auth/login",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["api", "auth", "login"]
+            },
+            "description": "Authenticate user and receive JWT token"
+          },
+          "response": []
+        },
+        {
+          "name": "Signup",
+          "id": "624db89e-2773-4056-aa0b-d72d21dc7c02",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"password123\",\n  \"confirmPassword\": \"password123\",\n  \"firstName\": \"John\",\n  \"lastName\": \"Doe\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8000/api/auth/signup",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["api", "auth", "signup"]
+            },
+            "description": "Register a new user account"
+          },
+          "response": []
+        }
+      ],
+      "id": "8bd7d6df-34a1-4235-b2a3-94b3da67ab2b",
+      "description": "Authentication endpoints for login and signup"
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "Create User",
+          "id": "acbbb1c3-0597-4adc-913b-07b936acae28",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"john@example.com\",\n  \"firstName\": \"John\",\n  \"lastName\": \"Doe\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8000/api/users",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["api", "users"]
+            },
+            "description": "Create a new user (Admin only - Role 1)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Users",
+          "id": "dd3632f1-911e-4d66-85fa-9ac6eeeb4b3d",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8000/api/users",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["api", "users"]
+            },
+            "description": "Get all users (Admin only - Role 1)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get User by Email",
+          "id": "d7228516-0b02-44be-a262-c3060faef9ea",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8000/api/users?email=user@example.com",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["api", "users"],
+              "query": [
+                {
+                  "key": "email",
+                  "value": "user@example.com"
+                }
+              ]
+            },
+            "description": "Get user by email (Admin only - Role 1)"
+          },
+          "response": []
+        },
+        {
+          "name": "Check User Exists",
+          "id": "06aeb0d2-8d0d-4db9-8fdc-e24299e8de9b",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8000/api/users/exists?email=user@example.com",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["api", "users", "exists"],
+              "query": [
+                {
+                  "key": "email",
+                  "value": "user@example.com"
+                }
+              ]
+            },
+            "description": "Check if a user exists by email (Public endpoint)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get User by ID",
+          "id": "883fa0ad-c961-4ccd-ab86-b8545763e2e3",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8000/api/users/:id",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["api", "users", ":id"],
+              "variable": [
+                {
+                  "key": "id"
+                }
+              ]
+            },
+            "description": "Get a specific user by UUID (Authenticated)"
+          },
+          "response": []
+        },
+        {
+          "name": "Update User",
+          "id": "f3058a82-008f-4c98-a569-9bde981417c9",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstName\": \"Jane\",\n  \"lastName\": \"Smith\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8000/api/users/:id",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["api", "users", ":id"],
+              "variable": [
+                {
+                  "key": "id"
+                }
+              ]
+            },
+            "description": "Update user details (Authenticated)"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete User",
+          "id": "01544120-34b4-4199-9433-61cbf6185054",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8000/api/users/:id",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["api", "users", ":id"],
+              "variable": [
+                {
+                  "key": "id"
+                }
+              ]
+            },
+            "description": "Delete a user by UUID (Admin only - Role 1)"
+          },
+          "response": []
+        }
+      ],
+      "id": "35593492-a54f-4917-a19a-3cf06224fe7d",
+      "description": "User management endpoints (most require authentication)"
+    },
+    {
+      "name": "Articles",
+      "item": [
+        {
+          "name": "Create Article",
+          "id": "d21219ff-d189-4a85-b7c5-0682f9e77e6c",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"article_id\": \"ART-001\",\n  \"barcode\": \"1234567890123\",\n  \"name\": \"Widget A\",\n  \"manufacturer\": \"Acme Corp\",\n  \"category\": \"Electronics\",\n  \"price\": 29.99,\n  \"scanned\": 0\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8000/api/articles",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["api", "articles"]
+            },
+            "description": "Create a new article (Roles 1 or 3 required)"
+          },
+          "response": []
+        },
+        {
+          "name": "Bulk Create Articles",
+          "id": "f0235346-7696-4a30-a481-e4b674643abe",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"articles\": [\n    {\n      \"article_id\": \"ART-001\",\n      \"barcode\": \"1234567890123\",\n      \"name\": \"Widget A\",\n      \"manufacturer\": \"Acme Corp\",\n      \"category\": \"Electronics\",\n      \"price\": 29.99,\n      \"scanned\": 0\n    },\n    {\n      \"article_id\": \"ART-002\",\n      \"barcode\": \"1234567890124\",\n      \"name\": \"Widget B\",\n      \"manufacturer\": \"Acme Corp\",\n      \"category\": \"Electronics\",\n      \"price\": 39.99,\n      \"scanned\": 0\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8000/api/articles/bulk",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["api", "articles", "bulk"]
+            },
+            "description": "Create multiple articles at once (Admin only - Role 1)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Articles",
+          "id": "830063af-13d7-4650-9e84-d48626458929",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8000/api/articles?page=1&limit=10&search=",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["api", "articles"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number (1-indexed)"
+                },
+                {
+                  "key": "limit",
+                  "value": "10",
+                  "description": "Items per page"
+                },
+                {
+                  "key": "search",
+                  "value": "",
+                  "description": "Search term for filtering"
+                }
+              ]
+            },
+            "description": "Get paginated list of articles with optional search (Public)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Article by ID",
+          "id": "33c6d7ea-3bc5-4fe0-b61f-91b35c6d9583",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8000/api/articles/:id",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["api", "articles", ":id"],
+              "variable": [
+                {
+                  "key": "id"
+                }
+              ]
+            },
+            "description": "Get a specific article by numeric ID (Public)"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Article",
+          "id": "e440202e-bf94-4131-ba8a-c9d16e0777bb",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Updated Widget\",\n  \"price\": 34.99\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8000/api/articles/:id",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["api", "articles", ":id"],
+              "variable": [
+                {
+                  "key": "id"
+                }
+              ]
+            },
+            "description": "Update an article (Roles 1 or 3 required)"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Article",
+          "id": "71fb3a55-fac7-4c09-825d-7d9567bf13ae",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8000/api/articles/:id",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["api", "articles", ":id"],
+              "variable": [
+                {
+                  "key": "id"
+                }
+              ]
+            },
+            "description": "Delete an article by ID (Roles 1 or 3 required)"
+          },
+          "response": []
+        }
+      ],
+      "id": "225cbcdf-895d-47d9-96f7-6934fc90c318",
+      "description": "Article management endpoints"
+    },
+    {
+      "name": "Root",
+      "item": [
+        {
+          "name": "Health Check",
+          "id": "7cb5a0d2-e25a-4516-a4ff-bf6ed4d2a4cd",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8000/api",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["api"]
+            },
+            "description": "Root endpoint - returns hello message"
+          },
+          "response": []
+        }
+      ],
+      "id": "9749714e-9a76-4926-be4a-7a8229312fff",
+      "description": "Root application endpoint"
+    }
+  ]
+}

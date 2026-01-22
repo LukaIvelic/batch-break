@@ -1,13 +1,14 @@
 import { useSheetLayout } from "@/src/hooks/useSheetLayout";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Article } from "@/src/types";
 import { EditArticleContent } from "./EditArticleContent/EditArticleContent";
 
 interface EditArticleProps {
   article: Article;
+  isAdmin?: boolean;
 }
 
-export function EditArticle({ article }: EditArticleProps) {
+export function EditArticle({ article, isAdmin = false }: EditArticleProps) {
   const { setSheetLayoutItems, open } = useSheetLayout();
 
   useEffect(() => {
@@ -19,5 +20,9 @@ export function EditArticle({ article }: EditArticleProps) {
     });
   }, []);
 
-  return <div onClick={open}>Edit</div>;
+  return (
+    <button onClick={open} disabled={!isAdmin} className="w-full text-left">
+      Edit
+    </button>
+  );
 }

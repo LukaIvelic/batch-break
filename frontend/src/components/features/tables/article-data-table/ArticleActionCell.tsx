@@ -8,8 +8,9 @@ import {
 } from "@/src/components/ui/dropdown-menu";
 import { Button } from "@/src/components/ui/button";
 import { MoreHorizontal } from "lucide-react";
-import { Article } from "@/src/types";
+import { Article, Role } from "@/src/types";
 import { EditArticle } from "../../edit-article/EditArticle";
+import { useAuth } from "@/src/api/services";
 
 interface ArticleActionCellProps {
   article: Article;
@@ -17,6 +18,7 @@ interface ArticleActionCellProps {
 
 export function ArticleActionCell(props: ArticleActionCellProps) {
   const { article } = props;
+  const { user } = useAuth();
 
   return (
     <>
@@ -32,7 +34,10 @@ export function ArticleActionCell(props: ArticleActionCellProps) {
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem>
-            <EditArticle article={article} />
+            <EditArticle
+              article={article}
+              isAdmin={user?.roleId === Role.ADMIN}
+            />
           </DropdownMenuItem>
           <DropdownMenuItem
             className="text-destructive"

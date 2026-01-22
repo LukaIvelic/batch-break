@@ -19,6 +19,9 @@ export class UserResponseDto {
   @ApiProperty({ example: 'Doe', description: 'User last name' })
   lastName: string;
 
+  @ApiProperty({ example: 1, description: 'User role ID' })
+  roleId: number;
+
   @ApiProperty({
     example: '2026-01-10T00:00:00.000Z',
     description: 'Creation timestamp',

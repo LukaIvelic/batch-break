@@ -29,7 +29,11 @@ export class AuthService {
       throw new ForbiddenException('Authentication failed');
     }
 
-    const payload = { userId: user.id, email: user.email };
+    const payload = {
+      userId: user.id,
+      email: user.email,
+      roleId: user.role?.id ?? null,
+    };
     const accessToken = this.jwtService.sign(payload);
 
     return {
@@ -60,11 +64,13 @@ export class AuthService {
       lastName,
     });
 
-    console.log('New user created:', newUser);
-
     if (!newUser) throw new InternalServerErrorException('Signup failed');
 
-    const payload = { userId: newUser.id, email: newUser.email };
+    const payload = {
+      userId: newUser.id,
+      email: newUser.email,
+      roleId: newUser.roleId,
+    };
     const accessToken = this.jwtService.sign(payload);
 
     return {

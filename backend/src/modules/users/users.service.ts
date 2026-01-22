@@ -36,6 +36,7 @@ export class UsersService {
       email,
       firstName,
       lastName,
+      role: { id: 4 },
       password: hashedPassword,
     });
 
@@ -44,12 +45,15 @@ export class UsersService {
   }
 
   async findAll(): Promise<UserResponseDto[]> {
-    const users = await this.usersRepository.find();
+    const users = await this.usersRepository.find({ relations: ['role'] });
     return users.map((user) => this.mapToUserResponse(user));
   }
 
   async findOne(id: string): Promise<UserResponseDto> {
-    const user = await this.usersRepository.findOne({ where: { id } });
+    const user = await this.usersRepository.findOne({
+      where: { id },
+      relations: ['role'],
+    });
 
     if (!user) {
       throw new NotFoundException(`User with ID ${id} not found`);
@@ -58,9 +62,11 @@ export class UsersService {
     return this.mapToUserResponse(user);
   }
 
-
   async findOneByEmail(email: string): Promise<UserResponseDto | null> {
-    const user = await this.usersRepository.findOne({ where: { email } });
+    const user = await this.usersRepository.findOne({
+      where: { email },
+      relations: ['role'],
+    });
 
     if (!user) {
       return null;
@@ -69,15 +75,18 @@ export class UsersService {
     return this.mapToUserResponse(user);
   }
 
-
   async exists(email: string): Promise<{ exists: boolean }> {
     const user = await this.usersRepository.findOne({ where: { email } });
     return { exists: !!user };
   }
 
-
-  async getCredentialsByEmail(email: string): Promise<GetUserCredentialsResponse | null> {
-    const user = await this.usersRepository.findOne({ where: { email } });
+  async getCredentialsByEmail(
+    email: string,
+  ): Promise<GetUserCredentialsResponse | null> {
+    const user = await this.usersRepository.findOne({
+      where: { email },
+      relations: ['role'],
+    });
 
     if (!user) {
       return null;
@@ -86,12 +95,14 @@ export class UsersService {
     return user;
   }
 
-
   async update(
     id: string,
     updateUserDto: UpdateUserDto,
   ): Promise<UserResponseDto> {
-    const user = await this.usersRepository.findOne({ where: { id } });
+    const user = await this.usersRepository.findOne({
+      where: { id },
+      relations: ['role'],
+    });
 
     if (!user) {
       throw new NotFoundException(`User with ID ${id} not found`);
@@ -134,6 +145,7 @@ export class UsersService {
   private mapToUserResponse(user: User): UserResponseDto {
     return {
       id: user.id,
+      roleId: user.role?.id ?? null,
       email: user.email,
       firstName: user.firstName,
       lastName: user.lastName,

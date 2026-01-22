@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Role } from 'src/modules/roles/entities/role.entity';
 
 export class GetUserCredentialsResponse {
   @ApiProperty({
@@ -15,4 +16,7 @@ export class GetUserCredentialsResponse {
 
   @ApiProperty({ example: 'password123', description: 'User password' })
   password: string;
+
+  @ApiProperty({ description: 'User role' })
+  role: Role;
 }

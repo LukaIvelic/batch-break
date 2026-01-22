@@ -7,7 +7,6 @@ import { Subtitle } from "../../subtitle/Subtitle";
 import { Input } from "@/src/components/ui/input";
 import { Button } from "../../button/Button";
 import { articleService } from "@/src/api/services/articles/ArticleService";
-import { useRouter } from "next/navigation";
 import { useSheetLayout } from "@/src/hooks/useSheetLayout";
 import { useQueryClient } from "@tanstack/react-query";
 
@@ -16,7 +15,6 @@ export function EditArticleContent({ article }: { article: Article }) {
   const { close } = useSheetLayout();
   const [updatedArticle, setUpdatedArticle] =
     useState<ArticleUpdateResponse>(defaultArticle);
-  const router = useRouter();
   const queryClient = useQueryClient();
 
   const handleChange =

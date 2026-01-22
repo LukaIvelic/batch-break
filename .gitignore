@@ -3,3 +3,4 @@ generate-readme.json
 install.cmd
 Test-Path.ps1
 .claude
+.postman

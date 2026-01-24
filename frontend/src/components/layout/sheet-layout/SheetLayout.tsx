@@ -18,7 +18,7 @@ export default function SheetLayout() {
 
   return (
     <Sheet open={isOpen} onOpenChange={invertIsOpen}>
-      <SheetContent className="max-w-100! p-4">
+      <SheetContent className="p-4">
         <SheetHeader className="gap-0">
           <SheetTitle className="font-medium">{title}</SheetTitle>
           <SheetDescription>{description}</SheetDescription>

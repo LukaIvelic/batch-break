@@ -1,5 +1,3 @@
-import { exists } from "fs";
-
 export const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
@@ -18,5 +16,11 @@ export const endpoints = {
   articles: {
     base: "/articles",
     byId: (id: string) => `/articles/${id}`,
+  },
+  shipments: {
+    base: "/shipments",
+    byId: (id: string) => `/shipments/${id}`,
+    updateItem: (shipmentId: string, itemId: string) =>
+      `/shipments/${shipmentId}/items/${itemId}`,
   },
 };

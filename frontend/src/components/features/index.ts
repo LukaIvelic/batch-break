@@ -1,7 +1,6 @@
-import { Button } from "./button/Button";
-import { Input } from "./input/Input";
-import { Separator } from "./separator/Separator";
-import { Subtitle } from "./subtitle/Subtitle";
-import { Title } from "./title/Title";
-
-export { Button, Input, Separator, Subtitle, Title };
+export * from "./button/Button";
+export * from "./input/Input";
+export * from "./separator/Separator";
+export * from "./subtitle/Subtitle";
+export * from "./title/Title";
+export * from "./skeletons";

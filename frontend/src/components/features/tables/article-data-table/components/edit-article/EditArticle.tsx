@@ -18,6 +18,7 @@ export function EditArticle({ article, isAdmin = false }: EditArticleProps) {
         "Make changes to existing fields, once you're done click confirm.",
       content: <EditArticleContent article={article} />,
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

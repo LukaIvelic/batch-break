@@ -1,13 +1,12 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { articleService, useAuth } from "@/src/api/services";
+import { shipmentService, useAuth } from "@/src/api/services";
 import { DataTable } from "../../data-table/DataTable";
 import { usePaginationStore } from "@/src/hooks/usePaginationStore";
-import { getColumns } from "./components/ArticleDataTableColumns";
-
-export function ArticleDataTable() {
-  const tableId = "articles";
+import { getColumns } from "./components/ShipmentsDataTableColumns";
+export function ShipmentsDataTable() {
+  const tableId = "shipments";
   const { user } = useAuth();
 
   const pagination = usePaginationStore((s) => s.tables[tableId]) ?? {
@@ -22,7 +21,7 @@ export function ArticleDataTable() {
   const { data, isLoading } = useQuery({
     queryKey: [tableId, pagination.pageIndex, pagination.pageSize],
     queryFn: () =>
-      articleService.getAll({
+      shipmentService.getAll({
         limit: pagination.pageSize,
         page: pagination.pageIndex + 1,
       }),

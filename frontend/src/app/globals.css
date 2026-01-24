@@ -3,6 +3,7 @@
 
 @import "../styles/ButtonStyles.css";
 @import "../styles/TextInputStyles.css";
+@import "../styles/ReactFlowStyles.css";
 
 @custom-variant dark (&:is(.dark *));
 

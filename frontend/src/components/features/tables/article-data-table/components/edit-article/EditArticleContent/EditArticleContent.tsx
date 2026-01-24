@@ -3,15 +3,21 @@
 import { Article, ArticleUpdateResponse } from "@/src/types";
 import { useState } from "react";
 import { fields } from "./EditArticleContent.config";
-import { Subtitle } from "../../subtitle/Subtitle";
+import { Subtitle } from "../../../../../subtitle/Subtitle";
 import { Input } from "@/src/components/ui/input";
-import { Button } from "../../button/Button";
+import { Button } from "../../../../../button/Button";
 import { articleService } from "@/src/api/services/articles/ArticleService";
 import { useSheetLayout } from "@/src/hooks/useSheetLayout";
 import { useQueryClient } from "@tanstack/react-query";
 
 export function EditArticleContent({ article }: { article: Article }) {
-  const { id: ArticleId, createdAt, updatedAt, ...defaultArticle } = article;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const {
+    id: ArticleId,
+    createdAt: _createdAt,
+    updatedAt: _updatedAt,
+    ...defaultArticle
+  } = article;
   const { close } = useSheetLayout();
   const [updatedArticle, setUpdatedArticle] =
     useState<ArticleUpdateResponse>(defaultArticle);

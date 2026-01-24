@@ -52,25 +52,102 @@ function SheetContent({
 }: React.ComponentProps<typeof SheetPrimitive.Content> & {
   side?: "top" | "right" | "bottom" | "left";
 }) {
+  const [width, setWidth] = React.useState<number | null>(null);
+  const [isResizing, setIsResizing] = React.useState(false);
+  const contentRef = React.useRef<HTMLDivElement>(null);
+
+  const handleMouseDown = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setIsResizing(true);
+  };
+
+  React.useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!isResizing) return;
+
+      if (side === "right") {
+        const newWidth = window.innerWidth - e.clientX;
+        setWidth(Math.max(400, newWidth));
+      } else if (side === "left") {
+        const newWidth = e.clientX;
+        setWidth(Math.max(400, newWidth));
+      }
+    };
+
+    const handleMouseUp = () => {
+      setIsResizing(false);
+    };
+
+    if (isResizing) {
+      document.addEventListener("mousemove", handleMouseMove);
+      document.addEventListener("mouseup", handleMouseUp);
+      document.body.style.cursor = "ew-resize";
+      document.body.style.userSelect = "none";
+    }
+
+    return () => {
+      document.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("mouseup", handleMouseUp);
+      document.body.style.cursor = "";
+      document.body.style.userSelect = "";
+    };
+  }, [isResizing, side]);
+
+  const getBaseStyles = () => {
+    const baseStyles =
+      "bg-background data-[state=open]:animate-in data-[state=closed]:animate-out fixed z-50 flex flex-col gap-4 shadow-lg transition ease-in-out data-[state=closed]:duration-300 data-[state=open]:duration-500";
+
+    if (side === "right") {
+      return cn(
+        baseStyles,
+        "data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right inset-y-0 right-0 h-full border-l",
+        !width && "w-3/4 sm:max-w-sm",
+      );
+    } else if (side === "left") {
+      return cn(
+        baseStyles,
+        "data-[state=closed]:slide-out-to-left data-[state=open]:slide-in-from-left inset-y-0 left-0 h-full border-r",
+        !width && "w-3/4 sm:max-w-sm",
+      );
+    } else if (side === "top") {
+      return cn(
+        baseStyles,
+        "data-[state=closed]:slide-out-to-top data-[state=open]:slide-in-from-top inset-x-0 top-0 h-auto border-b",
+      );
+    } else {
+      return cn(
+        baseStyles,
+        "data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom inset-x-0 bottom-0 h-auto border-t",
+      );
+    }
+  };
+
   return (
     <SheetPortal>
       <SheetOverlay />
       <SheetPrimitive.Content
+        ref={contentRef}
         data-slot="sheet-content"
-        className={cn(
-          "bg-background data-[state=open]:animate-in data-[state=closed]:animate-out fixed z-50 flex flex-col gap-4 shadow-lg transition ease-in-out data-[state=closed]:duration-300 data-[state=open]:duration-500",
-          side === "right" &&
-            "data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right inset-y-0 right-0 h-full w-3/4 border-l sm:max-w-sm",
-          side === "left" &&
-            "data-[state=closed]:slide-out-to-left data-[state=open]:slide-in-from-left inset-y-0 left-0 h-full w-3/4 border-r sm:max-w-sm",
-          side === "top" &&
-            "data-[state=closed]:slide-out-to-top data-[state=open]:slide-in-from-top inset-x-0 top-0 h-auto border-b",
-          side === "bottom" &&
-            "data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom inset-x-0 bottom-0 h-auto border-t",
-          className,
-        )}
+        className={cn(getBaseStyles(), className)}
+        style={width ? { width: `${width}px` } : undefined}
         {...props}
       >
+        {(side === "right" || side === "left") && (
+          <div
+            className={cn(
+              "absolute inset-y-0 w-1 cursor-ew-resize hover:bg-primary/20 transition-colors group",
+              side === "right" ? "left-0" : "right-0",
+            )}
+            onMouseDown={handleMouseDown}
+          >
+            <div
+              className={cn(
+                "absolute inset-y-0 w-1 bg-primary/50 opacity-0 group-hover:opacity-100 transition-opacity",
+                side === "right" ? "left-0" : "right-0",
+              )}
+            />
+          </div>
+        )}
         {children}
         <SheetPrimitive.Close className="ring-offset-background focus:ring-ring data-[state=open]:bg-secondary absolute top-4 right-4 rounded-xs opacity-70 transition-opacity hover:opacity-100 focus:ring-2 focus:ring-offset-2 focus:outline-hidden disabled:pointer-events-none">
           <XIcon className="size-4" />

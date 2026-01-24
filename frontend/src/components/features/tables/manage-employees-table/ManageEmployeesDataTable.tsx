@@ -1,13 +1,13 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
-import { articleService, useAuth } from "@/src/api/services";
-import { DataTable } from "../../data-table/DataTable";
+import { useAuth, usersService } from "@/src/api/services";
 import { usePaginationStore } from "@/src/hooks/usePaginationStore";
-import { getColumns } from "./components/ArticleDataTableColumns";
+import { useQuery } from "@tanstack/react-query";
+import { DataTable } from "../../data-table/DataTable";
+import { getColumns } from "./ManageEmployeesDataTableColumns";
 
-export function ArticleDataTable() {
-  const tableId = "articles";
+export function ManageEmployeesDataTable() {
+  const tableId = "manage-employees";
   const { user } = useAuth();
 
   const pagination = usePaginationStore((s) => s.tables[tableId]) ?? {
@@ -21,19 +21,13 @@ export function ArticleDataTable() {
 
   const { data, isLoading } = useQuery({
     queryKey: [tableId, pagination.pageIndex, pagination.pageSize],
-    queryFn: () =>
-      articleService.getAll({
-        limit: pagination.pageSize,
-        page: pagination.pageIndex + 1,
-      }),
+    queryFn: () => usersService.getAll(),
   });
 
   return (
     <DataTable
-      data={data?.data || []}
+      data={data || []}
       columns={getColumns(user)}
-      rowCount={data?.meta?.total ?? 0}
-      pageCount={data?.meta?.totalPages ?? 0}
       isLoading={isLoading}
       tableId={tableId}
       pagination={pagination}

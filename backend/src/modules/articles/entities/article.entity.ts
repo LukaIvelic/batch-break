@@ -1,9 +1,11 @@
+import { ShipmentItem } from 'src/modules/shipment-item/entities/shipmentItem.entity';
 import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
 } from 'typeorm';
 
 @Entity('articles')
@@ -31,6 +33,9 @@ export class Article {
 
   @Column('int')
   scanned: number;
+
+  @OneToMany(() => ShipmentItem, (shipmentItem) => shipmentItem.article)
+  shipmentItems: ShipmentItem[];
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;

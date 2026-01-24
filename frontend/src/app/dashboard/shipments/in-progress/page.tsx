@@ -1,4 +1,5 @@
 import { Subtitle, Title } from "@/src/components/features";
+import { ShipmentsDataTable } from "@/src/components/features/tables/shipments-data-table/ShipmentsDataTable";
 
 export default function ArticlePage() {
   return (
@@ -7,6 +8,7 @@ export default function ArticlePage() {
         <Title>In-Progress Shipments</Title>
         <Subtitle>Shipments that are currently being processed</Subtitle>
       </div>
+      <ShipmentsDataTable />
     </div>
   );
 }

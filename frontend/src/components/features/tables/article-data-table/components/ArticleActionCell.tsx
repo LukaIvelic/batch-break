@@ -8,17 +8,16 @@ import {
 } from "@/src/components/ui/dropdown-menu";
 import { Button } from "@/src/components/ui/button";
 import { MoreHorizontal } from "lucide-react";
-import { Article, Role } from "@/src/types";
-import { EditArticle } from "../../edit-article/EditArticle";
-import { useAuth } from "@/src/api/services";
+import { Article, Role, User } from "@/src/types";
+import { EditArticle } from "./edit-article/EditArticle";
 
 interface ArticleActionCellProps {
   article: Article;
+  user: User | null;
 }
 
 export function ArticleActionCell(props: ArticleActionCellProps) {
-  const { article } = props;
-  const { user } = useAuth();
+  const { article, user } = props;
 
   return (
     <>

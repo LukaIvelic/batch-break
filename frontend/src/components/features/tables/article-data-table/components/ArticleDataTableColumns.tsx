@@ -1,13 +1,12 @@
 import { Button } from "@/src/components/ui/button";
 import { Checkbox } from "@/src/components/ui/checkbox";
-import { Article } from "@/src/types";
+import { Article, User } from "@/src/types";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
-import { TruncatedText } from "../../truncated-text/TruncatedText";
+import { TruncatedText } from "../../../truncated-text/TruncatedText";
 import { ArticleActionCell } from "./ArticleActionCell";
-import { useAuth } from "@/src/api/services";
 
-export const columns: ColumnDef<Article>[] = [
+export const getColumns = (user: User | null): ColumnDef<Article>[] => [
   {
     id: "select",
     size: 25,
@@ -99,7 +98,7 @@ export const columns: ColumnDef<Article>[] = [
     cell: ({ row }) => {
       const { price, ...article } = row.original;
       const articleData = { ...article, price: parseFloat(price.toString()) };
-      return <ArticleActionCell article={articleData} />;
+      return <ArticleActionCell article={articleData} user={user} />;
     },
   },
 ];

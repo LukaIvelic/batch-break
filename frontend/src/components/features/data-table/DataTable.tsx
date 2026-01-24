@@ -26,6 +26,7 @@ interface DataTableProps<TData> {
   setPagination?: OnChangeFn<PaginationState>;
   isLoading?: boolean;
   tableId?: string;
+  includeSearch?: boolean;
 }
 
 export function DataTable<TData>(props: DataTableProps<TData>) {
@@ -36,6 +37,7 @@ export function DataTable<TData>(props: DataTableProps<TData>) {
     rowCount,
     isLoading,
     pagination,
+    includeSearch = false,
     setPagination,
   } = props;
 
@@ -65,7 +67,9 @@ export function DataTable<TData>(props: DataTableProps<TData>) {
   return (
     <div className="w-full flex flex-col h-[60vh]">
       <div className="flex items-center py-4">
-        <DataTableSearch placeholder="Search..." table={table} />
+        {includeSearch && (
+          <DataTableSearch placeholder="Search..." table={table} />
+        )}
         <DataTableColumnVisibility table={table} />
       </div>
       <div className="overflow-y-auto rounded-md border flex-1">

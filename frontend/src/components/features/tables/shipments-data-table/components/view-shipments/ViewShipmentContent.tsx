@@ -45,18 +45,18 @@ export function ViewShipmentContent({ shipment }: { shipment: Shipment }) {
             <div className="border border-foreground/10 p-2 rounded-lg">
               {shipment.items.map((item) => {
                 const id = item.article.id;
-                const name = item.article.name;
+                const name = item.article.name.toLowerCase();
                 const quantity = item.quantity;
                 const scannedQuantity = item.scannedQuantity;
 
                 return (
                   <div
                     key={id}
-                    className="grid grid-cols-[5fr_1fr_1fr] p-2 border-b border-foreground/10 last:border-0"
+                    className="grid grid-cols-[5fr_1fr_1fr] p-2 border-b border-foreground/10 last:border-0 text-[14px]"
                   >
                     <span>{name}</span>
-                    <span className="font-medium">{quantity}</span>
-                    <span className="font-medium">
+                    <span>{quantity}</span>
+                    <span>
                       {((scannedQuantity / quantity) * 100).toFixed(2)}%
                     </span>
                   </div>

@@ -1,6 +1,69 @@
 # Batch Break
 
-A full-stack web application built with **NestJS** (backend) and **Next.js** (frontend), featuring user authentication with role-based access control, dashboard functionality, and a modern UI component library.
+A full-stack logistics and inventory management system designed to streamline warehouse operations, shipment processing, and quality control through real-time barcode/QR code scanning.
+
+## 📋 Overview
+
+Batch Break is a production-ready application that enables warehouse teams to manage shipments, track article inventory, scan items during processing, and report issues with role-based access control. The system provides real-time updates, comprehensive tracking, and an intuitive interface for operators, managers, and administrators.
+
+### Key Features
+
+- **Shipment Management** – Create, track, and manage shipments with automatic status transitions
+- **Real-time Scanning** – Barcode (EAN-13) and QR code scanning for article verification
+- **Issue Reporting** – Report and track shipment issues with severity levels
+- **Article Inventory** – Comprehensive article management with bulk import capabilities
+- **Role-Based Access Control** – Four-tier permission system (Admin, Manager, Operator, Basic User)
+- **Employee Management** – User administration with role assignment
+- **Data Tables** – Advanced filtering, sorting, and pagination for all entities
+- **Theme Support** – Light/dark mode toggle with system preference detection
+- **API Documentation** – Interactive Swagger/OpenAPI documentation
+
+---
+
+## 🏗️ Architecture
+
+### Backend
+
+**Purpose**: RESTful API server providing authentication, data persistence, and business logic for warehouse operations.
+
+**Technology Stack**:
+
+- **Framework**: NestJS 11 with Fastify HTTP adapter
+- **Language**: TypeScript 5.7
+- **Database**: PostgreSQL (Neon serverless)
+- **ORM**: TypeORM 0.3.28
+- **Authentication**: Passport.js with JWT strategy
+- **Password Security**: bcrypt 6.0.0
+- **API Documentation**: Swagger/OpenAPI 11.2.4
+- **Validation**: class-validator & class-transformer
+- **Logging**: nestjs-pino 4.5.0
+
+### Frontend
+
+**Purpose**: Modern web application providing an intuitive interface for warehouse operations, scanning, and management tasks.
+
+**Technology Stack**:
+
+- **Framework**: Next.js 16.1.1 (App Router)
+- **Language**: TypeScript 5.9
+- **UI Library**: React 19.2.3
+- **Styling**: Tailwind CSS 4.1.18
+- **Component Library**: Radix UI (comprehensive primitives)
+- **State Management**: Zustand 5.0.10
+- **Data Fetching**: TanStack React Query 5.90.18
+- **Tables**: TanStack React Table 8.21.3
+- **Scanner**: @yudiel/react-qr-scanner 2.5.1
+- **Notifications**: sonner 2.0.7
+- **Icons**: Lucide React 0.562.0
+- **Theme**: next-themes 0.4.6
+
+### Development Tools
+
+- **Linting**: ESLint 9
+- **Formatting**: Prettier 3.7.4
+- **Git Hooks**: Husky 9.1.7 + lint-staged 16.2.7
+- **Testing**: Jest (backend) with TypeScript support
+- **Dependency Analysis**: Knip 5.81.0
 
 ---
 
@@ -8,126 +71,151 @@ A full-stack web application built with **NestJS** (backend) and **Next.js** (fr
 
 ```
 batch_break/
-├── backend/          # NestJS REST API
-├── frontend/         # Next.js application
-├── .husky/           # Git hooks for code quality
-├── start.bat         # Windows startup script
-├── start.sh          # Unix/macOS startup script
-└── package.json      # Root workspace configuration
+├── backend/              # NestJS REST API
+│   ├── src/
+│   │   ├── main.ts      # Application entry point (Fastify on port 8000)
+│   │   ├── app.module.ts
+│   │   ├── commons/     # Shared utilities, filters, interceptors
+│   │   └── modules/     # Feature modules
+│   │       ├── auth/              # JWT authentication (login, signup)
+│   │       ├── database/          # TypeORM configuration
+│   │       ├── roles/             # Role entity (1-4: Admin to Basic)
+│   │       ├── users/             # User CRUD operations
+│   │       ├── articles/          # Article inventory management
+│   │       ├── shipments/         # Shipment lifecycle management
+│   │       ├── shipment-item/     # Shipment items with articles
+│   │       └── issues/            # Issue reporting system
+│   ├── test/            # E2E tests
+│   └── package.json
+│
+├── frontend/            # Next.js web application
+│   ├── src/
+│   │   ├── app/        # Next.js App Router pages
+│   │   │   ├── login/                   # Authentication pages
+│   │   │   ├── signup/
+│   │   │   └── dashboard/               # Protected routes
+│   │   │       ├── page.tsx             # Dashboard home
+│   │   │       ├── articles/            # Article inventory table
+│   │   │       ├── shipments/           # Shipment management
+│   │   │       │   ├── page.tsx         # Shipments list
+│   │   │       │   └── issues/          # Issue management
+│   │   │       ├── scan/                # Barcode/QR scanning
+│   │   │       │   ├── qr/              # QR code scanner
+│   │   │       │   └── barcode/         # Barcode scanner
+│   │   │       └── management/          # Employee management
+│   │   ├── api/
+│   │   │   ├── config/               # API client & endpoints
+│   │   │   ├── services/             # Service classes
+│   │   │   │   ├── auth/
+│   │   │   │   ├── users/
+│   │   │   │   ├── articles/
+│   │   │   │   ├── shipments/
+│   │   │   │   └── issues/
+│   │   │   └── responses/            # Response types
+│   │   ├── components/
+│   │   │   ├── features/             # Feature components
+│   │   │   │   ├── scanner/          # Code scanner implementation
+│   │   │   │   ├── report-issue/     # Issue reporting form
+│   │   │   │   ├── data-table/       # Reusable table components
+│   │   │   │   └── tables/           # Domain-specific tables
+│   │   │   ├── layout/               # Sidebar, navigation
+│   │   │   ├── ui/                   # Radix-based UI components
+│   │   │   └── providers/            # Theme & query providers
+│   │   ├── types/                    # TypeScript type definitions
+│   │   ├── hooks/                    # Custom React hooks
+│   │   └── lib/                      # Utilities & config
+│   └── next.config.ts
+│
+├── .husky/              # Git hooks
+├── start.bat            # Windows startup script
+├── start.sh             # Unix/macOS startup script
+├── package.json         # Root workspace configuration
+└── README.md
 ```
-
----
-
-## ✨ Features
-
-- **User Authentication** – JWT-based login and signup with session management
-- **Role-Based Access Control** – User roles with database-level relationships
-- **User Management** – Full CRUD operations for user accounts
-- **Dashboard** – Protected dashboard with collapsible sidebar navigation
-- **Theme Support** – Light/dark mode toggle with system preference detection
-- **API Documentation** – Swagger/OpenAPI integration
-- **Type Safety** – Full TypeScript support across the stack
-- **Code Quality** – Pre-commit hooks with Husky and lint-staged
-- **Dependency Analysis** – Knip integration for detecting unused dependencies
-
----
-
-## 🛠 Tech Stack
-
-### Backend
-
-| Dependency      | Purpose                    |
-| --------------- | -------------------------- |
-| NestJS 11       | Node.js framework          |
-| Fastify         | HTTP adapter               |
-| TypeORM         | Database ORM               |
-| PostgreSQL      | Database (Neon serverless) |
-| Passport + JWT  | Authentication             |
-| bcrypt          | Password hashing           |
-| Swagger         | API documentation          |
-| class-validator | Request validation         |
-
-### Frontend
-
-| Dependency               | Purpose               |
-| ------------------------ | --------------------- |
-| Next.js 16               | React framework       |
-| React 19                 | UI library            |
-| Tailwind CSS 4           | Styling               |
-| Radix UI                 | Accessible components |
-| Lucide React             | Icons                 |
-| next-themes              | Theme management      |
-| class-variance-authority | Component variants    |
-
-### Development Tools
-
-| Tool         | Purpose                     |
-| ------------ | --------------------------- |
-| TypeScript 5 | Type safety                 |
-| ESLint       | Linting                     |
-| Prettier     | Code formatting             |
-| Husky        | Git hooks                   |
-| lint-staged  | Pre-commit formatting       |
-| Knip         | Unused dependency detection |
-| Jest         | Testing (backend)           |
-
----
-
-## 📋 Prerequisites
-
-- **Node.js** >= 20.x
-- **npm** >= 10.x
-- **PostgreSQL** database (or Neon serverless account)
 
 ---
 
 ## 🚀 Installation
 
-### 1. Clone the Repository
+### Prerequisites
 
-```bash
-git clone <repository-url>
-cd batch_break
-```
+- **Node.js**: v18 or higher
+- **npm**: v10 or higher
+- **PostgreSQL**: v14 or higher (or Neon serverless account)
 
-### 2. Install Root Dependencies
+### Backend Setup
 
-```bash
-npm install
-```
+1. **Navigate to the backend directory**:
 
-### 3. Backend Setup
+   ```bash
+   cd backend
+   ```
 
-```bash
-cd backend
-npm install
-```
+2. **Install dependencies**:
 
-Create a `.env` file in the `backend/` directory:
+   ```bash
+   npm install
+   ```
 
-```env
-DATABASE_URL=postgresql://user:password@host:port/database?sslmode=require
-JWT_SECRET=your-secure-jwt-secret-key
-```
+3. **Configure environment variables**:
 
-### 4. Frontend Setup
+   Create a `.env` file in the `backend` directory:
 
-```bash
-cd frontend
-npm install
-```
+   ```env
+   # Database Configuration
+   DATABASE_URL=postgresql://username:password@host:port/database?sslmode=require
 
-Create a `.env` file in the `frontend/` directory (optional):
+   # JWT Configuration
+   JWT_SECRET=your-secure-jwt-secret-key-here
 
-```env
-NEXT_PUBLIC_API_URL=http://localhost:8000
-```
+   # Application Environment
+   NODE_ENV=development
+   ```
 
----
+4. **Start the development server**:
 
-## ▶️ Running the Application
+   ```bash
+   npm run start:dev
+   ```
 
-### Quick Start (Recommended)
+   The backend API will be available at `http://localhost:8000`
+
+5. **Access API documentation**:
+
+   Navigate to `http://localhost:8000/api-docs` for interactive Swagger UI
+
+### Frontend Setup
+
+1. **Navigate to the frontend directory**:
+
+   ```bash
+   cd frontend
+   ```
+
+2. **Install dependencies**:
+
+   ```bash
+   npm install
+   ```
+
+3. **Configure environment variables** (optional):
+
+   Create a `.env.local` file in the `frontend` directory:
+
+   ```env
+   # API URL (defaults to localhost:8000 via next.config.ts rewrites)
+   NEXT_PUBLIC_API_URL=http://localhost:8000
+   ```
+
+4. **Start the development server**:
+
+   ```bash
+   npm run dev
+   ```
+
+   The frontend application will be available at `http://localhost:3000`
+
+### Quick Start (Both Services)
 
 Use the provided startup scripts to run both frontend and backend simultaneously:
 
@@ -154,61 +242,38 @@ chmod +x start.sh
 ./start.sh
 ```
 
-### Manual Start
-
-#### Backend
-
-```bash
-cd backend
-
-# Development mode (with hot reload)
-npm run start:dev
-
-# Production mode
-npm run build
-npm run start:prod
-```
-
-The API will be available at `http://localhost:8000`
-
-Swagger documentation: `http://localhost:8000/api`
-
-#### Frontend
-
-```bash
-cd frontend
-
-# Development mode
-npm run dev
-
-# Production build
-npm run build
-npm run start
-```
-
-The application will be available at `http://localhost:3000`
-
 ---
 
-## 🧪 Testing
+## 🔑 Authentication & Authorization
 
-### Backend
+### User Roles
 
-```bash
-cd backend
+The system includes four predefined roles with different permission levels:
 
-# Unit tests
-npm run test
+| Role ID | Role Name  | Permissions                                |
+| ------- | ---------- | ------------------------------------------ |
+| 1       | Admin      | Full system access, user management        |
+| 2       | Operator   | Scanning, issue reporting, view access     |
+| 3       | Manager    | Shipment/article CRUD, employee management |
+| 4       | Basic User | Read-only access                           |
 
-# Watch mode
-npm run test:watch
+### First User Setup
 
-# Coverage report
-npm run test:cov
+1. Register a new account via `/signup`
+2. Default role assigned: Basic User (4)
+3. Manually update the role in the database to Admin (1) for the first user:
+   ```sql
+   UPDATE users SET role_id = 1 WHERE email = 'your-email@example.com';
+   ```
 
-# E2E tests
-npm run test:e2e
-```
+### Role-Based Endpoint Protection
+
+Endpoints are protected using `@Roles()` decorators:
+
+- **Admin (1)**: User creation, full access
+- **Manager (3)**: Shipment/article management, user updates
+- **Operator (2)**: Scanning operations, issue reporting
+- **Basic User (4)**: Read-only access
 
 ---
 
@@ -216,133 +281,326 @@ npm run test:e2e
 
 ### Authentication
 
-| Method | Endpoint       | Description       |
-| ------ | -------------- | ----------------- |
-| POST   | `/auth/login`  | User login        |
-| POST   | `/auth/signup` | User registration |
+```
+POST /auth/login      - User login with email/password
+POST /auth/signup     - User registration
+```
 
-### Users
+### Users (JWT Required)
 
-| Method | Endpoint               | Description          |
-| ------ | ---------------------- | -------------------- |
-| POST   | `/users`               | Create user          |
-| GET    | `/users`               | Get all users        |
-| GET    | `/users/:id`           | Get user by ID       |
-| GET    | `/users?email=`        | Get user by email    |
-| GET    | `/users/exists?email=` | Check if user exists |
-| PATCH  | `/users/:id`           | Update user          |
-| DELETE | `/users/:id`           | Delete user          |
+```
+GET    /users                    - Fetch all users
+GET    /users/:id                - Get user by ID
+GET    /users?email=...          - Find user by email
+GET    /users/exists?email=...   - Check if email exists
+POST   /users                    - Create user (Admin only)
+PATCH  /users/:id                - Update user (Admin/Manager)
+DELETE /users/:id                - Delete user (Admin/Manager)
+```
+
+### Articles
+
+```
+GET    /articles                 - Get paginated articles (supports search)
+GET    /articles/:id             - Get article by ID
+POST   /articles                 - Create article (Admin/Manager)
+POST   /articles/bulk            - Bulk create articles (Admin/Manager)
+PATCH  /articles/:id             - Update article (Admin/Manager)
+DELETE /articles/:id             - Delete article (Admin/Manager)
+```
+
+### Shipments
+
+```
+GET    /shipments                - Get paginated shipments (search, status filter)
+GET    /shipments/:id            - Get shipment details with items
+POST   /shipments                - Create shipment (Admin/Manager)
+POST   /shipments/scan/:barcode  - Scan article barcode (Admin/Manager/Operator)
+PATCH  /shipments/:id            - Update shipment status (Admin/Manager)
+PATCH  /shipments/:shipmentId/items/:itemId - Update item quantity
+DELETE /shipments/:id            - Delete shipment (Admin/Manager)
+```
+
+### Issues
+
+```
+GET    /issues                   - Get all issues
+GET    /issues/:id               - Get issue by ID
+POST   /issues                   - Report issue (Admin/Manager/Operator)
+PATCH  /issues/:id               - Update issue status (Admin/Manager/Operator)
+DELETE /issues/:id               - Delete issue (Admin/Manager/Operator)
+```
+
+**Full API documentation**: Visit `/api-docs` when the backend server is running for interactive Swagger documentation.
 
 ---
 
-## 📂 Backend Architecture
+## 🗄️ Database Schema
 
+### Core Entities
+
+**Users**
+
+- UUID primary key
+- Authentication credentials with bcrypt hashing
+- Foreign key relationship to Roles
+- Tracks issue reporters
+
+**Roles**
+
+- Predefined roles (1-4: Admin, Operator, Manager, Basic User)
+- One-to-many relationship with Users
+
+**Articles**
+
+- Auto-increment primary key
+- Unique barcode (EAN-13 format)
+- Product information (name, manufacturer, category, price)
+- Scan count tracking
+- One-to-many relationship with ShipmentItems
+
+**Shipments**
+
+- Auto-generated shipment numbers (`SHP-{timestamp}-{random}`)
+- Status tracking (DRAFT, IN_PROGRESS, COMPLETED)
+- Article count tracking (total, different, scanned)
+- Progress calculation based on scanned items
+- One-to-many relationships with ShipmentItems and Issues
+
+**ShipmentItem**
+
+- Links articles to shipments with quantities
+- Tracks scanned vs. total quantities per article
+- Per-item completion status (PENDING, COMPLETED)
+- Many-to-one relationships to Shipment and Article
+
+**Issue**
+
+- Issue reporting against shipments
+- Severity levels (LOW=1, MEDIUM=2, HIGH=3)
+- Status tracking (RESOLVED, UNRESOLVED, DISMISSED)
+- Foreign keys to User (reporter) and Shipment
+- Timestamp tracking (createdAt, updatedAt)
+
+---
+
+## ▶️ Running the Application
+
+### Development Mode
+
+**Backend:**
+
+```bash
+cd backend
+npm run start:dev    # Hot reload enabled
 ```
-backend/src/
-├── main.ts                    # Application entry point
-├── app.module.ts              # Root module
-├── commons/
-│   ├── setup.ts               # App configuration (CORS, Swagger, validation)
-│   ├── filters/               # Exception filters
-│   └── interceptors/          # Response interceptors
-└── modules/
-    ├── auth/                  # Authentication module (login, signup)
-    ├── database/              # Database configuration
-    ├── roles/                 # Role management module
-    └── users/                 # User management module
+
+**Frontend:**
+
+```bash
+cd frontend
+npm run dev          # Fast refresh enabled
+```
+
+### Production Mode
+
+**Backend:**
+
+```bash
+cd backend
+npm run build
+npm run start:prod
+```
+
+**Frontend:**
+
+```bash
+cd frontend
+npm run build
+npm run start
 ```
 
 ---
 
-## 📂 Frontend Architecture
+## 🧪 Testing
 
+### Backend Tests
+
+```bash
+cd backend
+npm run test          # Run unit tests
+npm run test:watch    # Watch mode
+npm run test:cov      # Generate coverage report
+npm run test:e2e      # Run end-to-end tests
 ```
-frontend/src/
-├── app/                       # Next.js App Router pages
-│   ├── actions/               # Server actions
-│   ├── login/                 # Login page
-│   ├── signup/                # Signup page
-│   └── dashboard/             # Protected dashboard
-├── api/
-│   ├── config/                # API client configuration
-│   ├── responses/             # Response type definitions
-│   └── services/              # API service functions
-├── components/
-│   ├── features/              # Reusable feature components
-│   ├── layout/                # Layout components (sidebar, header, footer)
-│   ├── pages/                 # Page-level components
-│   ├── providers/             # React context providers (theme)
-│   └── ui/                    # Base UI components (Radix-based)
-├── hooks/                     # Custom React hooks
-├── lib/                       # Utilities and configuration
-└── styles/                    # Component-specific CSS styles
+
+### Code Quality
+
+The project uses automated code quality tools via git hooks:
+
+```bash
+# Root-level commands
+npm run knip          # Check for unused dependencies
+
+# Frontend linting
+cd frontend && npm run lint
+
+# Backend linting
+cd backend && npm run lint
 ```
+
+**Pre-commit hooks** automatically run ESLint and Prettier on staged files to ensure code quality.
 
 ---
 
-## 🔧 Available Scripts
+## 🚢 Deployment
 
-### Root
+### Production Environment
 
-| Command           | Description                  |
-| ----------------- | ---------------------------- |
-| `npm run prepare` | Install Husky git hooks      |
-| `npm run knip`    | Detect unused dependencies   |
-| `start.bat`       | Start both apps (Windows)    |
-| `start.sh`        | Start both apps (Unix/macOS) |
+The application is currently deployed on:
 
-### Backend
+- **Backend**: Railway ([batch-break-production.up.railway.app](https://batch-break-production.up.railway.app))
+- **Frontend**: Vercel (with API rewrites to Railway backend)
+- **Database**: Neon serverless PostgreSQL
 
-| Command              | Description               |
-| -------------------- | ------------------------- |
-| `npm run start:dev`  | Start in development mode |
-| `npm run start:prod` | Start in production mode  |
-| `npm run build`      | Build for production      |
-| `npm run lint`       | Run ESLint                |
-| `npm run format`     | Format code with Prettier |
-| `npm run test`       | Run tests                 |
+### Environment Variables (Production)
 
-### Frontend
+**Backend (Railway)**:
 
-| Command         | Description              |
-| --------------- | ------------------------ |
-| `npm run dev`   | Start development server |
-| `npm run build` | Build for production     |
-| `npm run start` | Start production server  |
-| `npm run lint`  | Run ESLint               |
+```env
+DATABASE_URL=postgresql://...?sslmode=require
+JWT_SECRET=your-production-jwt-secret
+NODE_ENV=production
+```
+
+**Frontend (Vercel)**:
+
+- No environment variables required (API URL configured via rewrites in `next.config.ts`)
+
+### Deployment Configuration
+
+**Backend build command**:
+
+```bash
+npm run build
+```
+
+**Backend start command**:
+
+```bash
+npm run start:prod
+```
+
+**Frontend** is automatically built and deployed by Vercel on push to main branch.
 
 ---
 
-## 🔒 Environment Variables
+## 🔧 Troubleshooting
 
-### Backend
+### Common Issues
 
-| Variable       | Required | Description                  |
-| -------------- | -------- | ---------------------------- |
-| `DATABASE_URL` | Yes      | PostgreSQL connection string |
-| `JWT_SECRET`   | Yes      | Secret key for JWT signing   |
+**Database Connection Errors**
 
-### Frontend
+- Verify `DATABASE_URL` is correctly formatted with proper credentials
+- Ensure PostgreSQL server is running and accessible
+- Check SSL mode requirements (`?sslmode=require` for Neon serverless)
+- Verify network/firewall settings
 
-| Variable              | Required | Description                                        |
-| --------------------- | -------- | -------------------------------------------------- |
-| `NEXT_PUBLIC_API_URL` | No       | Backend API URL (default: `http://localhost:8000`) |
+**JWT Authentication Failures**
+
+- Confirm `JWT_SECRET` is set in backend `.env`
+- Check token expiration settings
+- Verify `Authorization: Bearer {token}` header format
+- Clear browser cookies and localStorage
+
+**CORS Errors**
+
+- Backend CORS is enabled for all origins in development
+- For production, ensure frontend domain is whitelisted
+- Check `next.config.ts` rewrites configuration
+
+**Scanner Not Working**
+
+- Ensure HTTPS is enabled (required for camera access)
+- Grant camera permissions in browser settings
+- Verify @yudiel/react-qr-scanner is properly installed
+- Test in a different browser to rule out compatibility issues
+
+**Build Failures**
+
+- Clear node_modules and reinstall: `rm -rf node_modules && npm install`
+- Check Node.js version compatibility (v18+ required)
+- Verify TypeScript version matches across monorepo
+- Delete `.next` folder and rebuild frontend
+
+**Port Already in Use**
+
+```bash
+# Windows
+netstat -ano | findstr :8000
+
+# Unix/macOS
+lsof -i :8000
+```
 
 ---
 
 ## 🤝 Contributing
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/your-feature`)
-3. Commit your changes (`git commit -m 'Add your feature'`)
-4. Push to the branch (`git push origin feature/your-feature`)
-5. Open a Pull Request
+Contributions are welcome! Please follow these guidelines:
+
+### Workflow
+
+1. **Fork the repository** and create a feature branch
+
+   ```bash
+   git checkout -b feat/your-feature-name
+   ```
+
+2. **Make your changes** following the code style guidelines
+
+3. **Commit your changes** using conventional commit format
+
+   ```bash
+   git commit -m "feat: add your feature description"
+   ```
+
+   Commit types:
+   - `feat:` - New features
+   - `fix:` - Bug fixes
+   - `docs:` - Documentation changes
+   - `refactor:` - Code refactoring
+   - `test:` - Test additions or updates
+   - `chore:` - Build process or auxiliary tool changes
+
+4. **Push to your fork**
+
+   ```bash
+   git push origin feat/your-feature-name
+   ```
+
+5. **Submit a pull request** with a clear description of changes
 
 ### Code Style
 
-- Code is automatically formatted on commit via Husky + lint-staged
+- ESLint and Prettier configurations are enforced via pre-commit hooks
 - Follow existing patterns and conventions
 - Ensure all tests pass before submitting
+- Add tests for new features
+- Update documentation as needed
+
+---
+
+## 🔄 Recent Updates
+
+- ✅ **QR & Barcode Scanner** (Latest) – Integrated real-time scanning functionality for shipment processing
+- ✅ **Issues Management** – Added comprehensive issue reporting and tracking system with severity levels
+- ✅ **Employee Management** – Implemented user management table with role-based controls
+- ✅ **Shipment Details** – Enhanced shipment view with detailed item tracking and progress calculation
+- ✅ **Authorization** – Protected critical endpoints with role-based guards (Admin, Manager, Operator)
+- ✅ **Railway Deployment** – Backend deployed to Railway with PostgreSQL integration
+- ✅ **Articles Management** – CRUD operations with bulk import and search capabilities
+- ✅ **UI Improvements** – Minor UI fixes and enhanced user experience
 
 ---
 
@@ -352,38 +610,13 @@ This project is **UNLICENSED** – private and proprietary.
 
 ---
 
-## � Troubleshooting
+## 📞 Support
 
-### Common Issues
+For issues, questions, or contributions:
 
-**Port already in use**
-
-```bash
-# Check which process is using the port
-# Windows
-netstat -ano | findstr :8000
-
-# Unix/macOS
-lsof -i :8000
-```
-
-**Database connection errors**
-
-- Verify `DATABASE_URL` is correctly formatted
-- Ensure PostgreSQL server is running
-- Check network/firewall settings for Neon serverless
-
-**JWT authentication issues**
-
-- Ensure `JWT_SECRET` is set in the backend `.env`
-- Clear browser cookies and local storage
-- Verify token expiration settings
-
-**Frontend build errors**
-
-- Delete `node_modules` and `.next` folders, then reinstall
-- Ensure all environment variables are set
-- Check for TypeScript errors with `npm run lint`
+- **Issues**: Report bugs or request features via GitHub Issues
+- **API Documentation**: Refer to Swagger docs at `/api-docs`
+- **Code Review**: All pull requests are reviewed before merging
 
 ---
 
@@ -394,4 +627,9 @@ lsof -i :8000
 - [TypeORM Documentation](https://typeorm.io/)
 - [Tailwind CSS Documentation](https://tailwindcss.com/docs)
 - [Radix UI Documentation](https://www.radix-ui.com/docs)
+- [TanStack Query Documentation](https://tanstack.com/query/latest)
 - [Neon Serverless PostgreSQL](https://neon.tech/docs)
+
+---
+
+**Built with ❤️ for efficient warehouse operations**

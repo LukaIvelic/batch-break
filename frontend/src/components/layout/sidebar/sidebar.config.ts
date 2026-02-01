@@ -1,8 +1,6 @@
 import {
   Home,
   Users,
-  FolderOpen,
-  FileText,
   Calendar,
   BarChart,
   Settings,
@@ -11,6 +9,7 @@ import {
   QrCode,
   Package,
   Layers,
+  Ticket,
 } from "lucide-react";
 
 export interface SidebarSubItem {
@@ -51,11 +50,12 @@ export const sidebarConfig = {
     {
       title: "Shipments",
       icon: Package,
-      items: [
-        { title: "In progress", url: "/dashboard/shipments/in-progress" },
-        { title: "Finished", url: "/dashboard/shipments/finished" },
-        { title: "Drafts", url: "/dashboard/shipments/drafts" },
-      ],
+      url: "/dashboard/shipments",
+    },
+    {
+      title: "Shipment Issues",
+      icon: Ticket,
+      url: "/dashboard/shipments/issues",
     },
     {
       title: "Articles",

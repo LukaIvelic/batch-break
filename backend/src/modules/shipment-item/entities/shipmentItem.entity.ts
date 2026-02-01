@@ -32,7 +32,9 @@ export class ShipmentItem {
   })
   status: ShipmentItemStatus;
 
-  @ManyToOne(() => Shipment, (shipment) => shipment.items)
+  @ManyToOne(() => Shipment, (shipment) => shipment.items, {
+    onDelete: 'CASCADE',
+  })
   shipment: Shipment;
 
   @ManyToOne(() => Article, (article) => article.shipmentItems, { eager: true })

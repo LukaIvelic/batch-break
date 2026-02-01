@@ -1,3 +1,2 @@
-import { cn } from "./cn";
-
-export { cn };
+export * from "./capitalize";
+export * from "./cn";

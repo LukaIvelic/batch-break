@@ -73,7 +73,7 @@ export const getColumns = (user: User | null): ColumnDef<Shipment>[] => [
     size: 90,
     header: "Actions",
     cell: ({ row }) => {
-      return <ShipmentsActionCell shipments={row.original} user={user} />;
+      return <ShipmentsActionCell shipment={row.original} user={user} />;
     },
   },
 ];

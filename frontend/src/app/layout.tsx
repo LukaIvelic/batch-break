@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { satoshi } from "../lib/config/satoshi";
 import { ThemeProvider, QueryProvider } from "@/src/components/providers";
+import { PopupProvider } from "../components/ui/popup";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -24,6 +25,7 @@ export default function RootLayout({ children }: Readonly<RootLayoutProps>) {
             disableTransitionOnChange
           >
             {children}
+            <PopupProvider />
           </ThemeProvider>
         </QueryProvider>
       </body>

@@ -1,5 +1,11 @@
 import { applyDecorators, HttpCode, HttpStatus } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiParam, ApiQuery } from '@nestjs/swagger';
+import {
+  ApiOperation,
+  ApiResponse,
+  ApiParam,
+  ApiQuery,
+  ApiBody,
+} from '@nestjs/swagger';
 import { ShipmentResponseDto } from './dto/shipment-response.dto';
 import { ShipmentStatus } from './entities/shipment.entity';
 
@@ -80,6 +86,7 @@ export function ApiShipmentDelete() {
     HttpCode(HttpStatus.NO_CONTENT),
     ApiOperation({ summary: 'Delete a shipment' }),
     ApiParam({ name: 'id', description: 'Shipment ID' }),
+    ApiBody({ schema: { type: 'object' }, required: false }),
     ApiResponse({ status: 204, description: 'Shipment deleted successfully' }),
     ApiResponse({ status: 404, description: 'Shipment not found' }),
   );

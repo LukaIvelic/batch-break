@@ -40,6 +40,20 @@ export class ShipmentsController {
     return this.shipmentsService.create(createShipmentDto);
   }
 
+  @Post('scan/:barcode')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(1, 2, 3)
+  @ApiBearerAuth()
+  async scanArticle(@Param('barcode') barcode: string) {
+    const item = await this.shipmentsService.scanArticle(barcode);
+    if (!item) {
+      throw new NotFoundException(
+        `No pending shipment found for article with barcode ${barcode}`,
+      );
+    }
+    return item;
+  }
+
   @Get()
   @Dec.ApiShipmentFindAll()
   findAll(
@@ -106,7 +120,12 @@ export class ShipmentsController {
   @Roles(1, 3)
   @ApiBearerAuth()
   @Dec.ApiShipmentDelete()
-  delete(@Param('id', ParseIntPipe) id: number): Promise<void> {
+  async delete(
+    @Param('id', ParseIntPipe) id: number,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    @Body() _body?: Record<string, never>,
+  ): Promise<void> {
+    console.log('Received delete request for shipment ID:', id);
     return this.shipmentsService.delete(id);
   }
 }

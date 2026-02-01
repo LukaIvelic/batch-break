@@ -22,5 +22,8 @@
       "prettier --write"
     ],
     "**/*.{json,css,md}": "prettier --write"
+  },
+  "dependencies": {
+    "@anthropic-ai/claude-code": "^2.1.19"
   }
 }

@@ -91,11 +91,21 @@ class ShipmentService {
     try {
       await api.delete<NestResponse<void>>(endpoints.shipments.byId(id), {
         cache: "no-store",
+        body: {},
       });
       return true;
     } catch {
       return false;
     }
+  }
+
+  async scanArticle(barcode: string): Promise<ShipmentItem | null> {
+    const res = await api.post<NestResponse<ShipmentItem>>(
+      endpoints.shipments.scan(barcode),
+      {},
+      { cache: "no-store" },
+    );
+    return res.response ?? null;
   }
 }
 

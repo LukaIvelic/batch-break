@@ -39,9 +39,10 @@ function articlesToReactFlowEdges(
       target: `shipment-${shipment.id}`,
       type: "smoothstep",
       label:
-        shipment.items
-          ?.find((item) => item.article.article_id === article.article_id)
-          ?.quantity.toString() || "0",
+        "Quantity: " +
+          shipment.items
+            ?.find((item) => item.article.article_id === article.article_id)
+            ?.quantity.toString() || "0",
     };
   });
 }

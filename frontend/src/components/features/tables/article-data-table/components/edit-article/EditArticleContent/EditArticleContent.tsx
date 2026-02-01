@@ -11,10 +11,11 @@ import { useSheetLayout } from "@/src/hooks/useSheetLayout";
 import { useQueryClient } from "@tanstack/react-query";
 
 export function EditArticleContent({ article }: { article: Article }) {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const {
     id: ArticleId,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     createdAt: _createdAt,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     updatedAt: _updatedAt,
     ...defaultArticle
   } = article;
@@ -59,7 +60,7 @@ export function EditArticleContent({ article }: { article: Article }) {
         className="mt-4 rounded-[10px]! inverted  py-2! font-medium"
         onClick={handleSubmit}
       >
-        Submit
+        Confirm
       </Button>
     </div>
   );

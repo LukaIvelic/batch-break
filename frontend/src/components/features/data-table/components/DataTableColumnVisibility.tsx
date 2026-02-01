@@ -48,7 +48,7 @@ export function DataTableColumnVisibility<T>(
           Columns <ChevronDown />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
+      <DropdownMenuContent align="start">
         {columns.filter(canHideColumn).map((column, index) => (
           <DataTableColumnVisibilityItem column={column} key={index} />
         ))}

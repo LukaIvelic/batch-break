@@ -1,3 +1,4 @@
+import { Issue } from 'src/modules/issues/entities/issue.entity';
 import { Role } from 'src/modules/roles/entities/role.entity';
 import {
   Entity,
@@ -7,6 +8,7 @@ import {
   UpdateDateColumn,
   ManyToOne,
   JoinColumn,
+  OneToMany,
 } from 'typeorm';
 
 @Entity('users')
@@ -29,6 +31,9 @@ export class User {
 
   @Column()
   password: string;
+
+  @OneToMany(() => Issue, (issue) => issue.issueReporter)
+  issuesReported: Issue[];
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;

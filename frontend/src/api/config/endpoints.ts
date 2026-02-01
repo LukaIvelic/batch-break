@@ -22,5 +22,11 @@ export const endpoints = {
     byId: (id: string) => `/shipments/${id}`,
     updateItem: (shipmentId: string, itemId: string) =>
       `/shipments/${shipmentId}/items/${itemId}`,
+    scan: (barcode: string) => `/shipments/scan/${barcode}`,
+  },
+  issues: {
+    base: "/issues",
+    byId: (id: string) => `/issues/${id}`,
+    updateIssue: (id: string) => `/issues/${id}`,
   },
 };

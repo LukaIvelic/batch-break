@@ -119,7 +119,6 @@ export class ShipmentsService {
 
     const totalPages = Math.ceil(total / limit);
 
-    // Map to response DTOs with progress calculated
     const mappedData = data.map((shipment) => ({
       ...shipment,
       progress: shipment.progress,
@@ -201,7 +200,55 @@ export class ShipmentsService {
   }
 
   async delete(id: number): Promise<void> {
-    await this.shipmentRepository.delete(id);
+    const shipment = await this.shipmentRepository.findOne({
+      where: { id },
+      relations: ['items'],
+    });
+
+    if (shipment) {
+      // Delete items first manually
+      if (shipment.items && shipment.items.length > 0) {
+        await this.shipmentItemRepository.remove(shipment.items);
+      }
+      // Then delete the shipment
+      await this.shipmentRepository.remove(shipment);
+    }
+  }
+
+  async scanArticle(barcode: string): Promise<ShipmentItem | null> {
+    const article = await this.articleRepository.findOne({
+      where: { barcode },
+    });
+
+    if (!article) {
+      return null;
+    }
+
+    const shipmentItem = await this.shipmentItemRepository
+      .createQueryBuilder('item')
+      .innerJoinAndSelect('item.shipment', 'shipment')
+      .innerJoinAndSelect('item.article', 'article')
+      .where('article.id = :articleId', { articleId: article.id })
+      .andWhere('item.scannedQuantity < item.quantity')
+      .andWhere('shipment.status != :completedStatus', {
+        completedStatus: ShipmentStatus.COMPLETED,
+      })
+      .orderBy('shipment.createdAt', 'ASC')
+      .getOne();
+
+    if (!shipmentItem) {
+      return null;
+    }
+
+    shipmentItem.scannedQuantity += 1;
+
+    await this.shipmentItemRepository.save(shipmentItem);
+    await this.recalculateShipmentTotals(shipmentItem.shipment.id);
+
+    return this.shipmentItemRepository.findOne({
+      where: { id: shipmentItem.id },
+      relations: ['article', 'shipment'],
+    });
   }
 
   async recalculateShipmentTotals(shipmentId: number): Promise<void> {
@@ -228,7 +275,6 @@ export class ShipmentsService {
     shipment.totalArticles = totalArticles;
     shipment.scannedArticles = scannedArticles;
 
-    // Auto-update status based on progress
     if (scannedArticles === 0) {
       shipment.status = ShipmentStatus.DRAFT;
     } else if (scannedArticles < totalArticles) {

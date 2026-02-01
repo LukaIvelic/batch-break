@@ -5,10 +5,9 @@ import { ViewShipmentContent } from "./ViewShipmentContent";
 
 interface EditArticleProps {
   shipment: Shipment;
-  isAdmin?: boolean;
 }
 
-export function ViewShipments({ shipment, isAdmin = false }: EditArticleProps) {
+export function ViewShipments({ shipment }: EditArticleProps) {
   const { setSheetLayoutItems, open } = useSheetLayout();
 
   useEffect(() => {
@@ -21,7 +20,7 @@ export function ViewShipments({ shipment, isAdmin = false }: EditArticleProps) {
   }, []);
 
   return (
-    <button onClick={open} disabled={!isAdmin} className="w-full text-left">
+    <button onClick={open} className="w-full text-left">
       View Details
     </button>
   );

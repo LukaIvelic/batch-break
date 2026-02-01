@@ -23,7 +23,7 @@ export function ViewShipmentContent({ shipment }: { shipment: Shipment }) {
     <div className="flex flex-col gap-4 w-full">
       <div className="flex flex-col gap-4 w-full">
         <div>
-          <Title className="text-[16px]">Shipment Articles</Title>
+          <Title className="text-[16px]">Shipment articles</Title>
           <Subtitle className="text-[14px]">
             Quantity of each article in the shipment. Select a view mode to see
             details.
@@ -55,8 +55,10 @@ export function ViewShipmentContent({ shipment }: { shipment: Shipment }) {
                     className="grid grid-cols-[5fr_1fr_1fr] p-2 border-b border-foreground/10 last:border-0 text-[14px]"
                   >
                     <span>{name}</span>
-                    <span>{quantity}</span>
-                    <span>
+                    <span className="font-mono">
+                      {scannedQuantity}/{quantity}
+                    </span>
+                    <span className="font-mono">
                       {((scannedQuantity / quantity) * 100).toFixed(2)}%
                     </span>
                   </div>

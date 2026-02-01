@@ -9,6 +9,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { RolesModule } from './modules/roles/roles.module';
 import { ArticlesModule } from './modules/articles/articles.module';
 import { ShipmentsModule } from './modules/shipments/shipments.module';
+import { IssuesModule } from './modules/issues/issues.module';
 
 interface PinoRequest {
   method: string;
@@ -51,6 +52,7 @@ interface PinoResponse {
     AuthModule,
     ArticlesModule,
     ShipmentsModule,
+    IssuesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -1,4 +1,6 @@
 import { Subtitle, Title } from "@/src/components/features";
+import { CodeScanner } from "@/src/components/features/scanner/CodeScanner";
+import { CodeType } from "@/src/types";
 
 export default function ArticlePage() {
   return (
@@ -7,6 +9,7 @@ export default function ArticlePage() {
         <Title>Scan Barcode</Title>
         <Subtitle>Scan barcodes to process articles</Subtitle>
       </div>
+      <CodeScanner lookFor={CodeType.EAN13} />
     </div>
   );
 }

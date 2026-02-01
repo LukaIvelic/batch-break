@@ -1,3 +1,4 @@
+import { Issue } from 'src/modules/issues/entities/issue.entity';
 import { ShipmentItem } from 'src/modules/shipment-item/entities/shipmentItem.entity';
 import {
   Entity,
@@ -45,13 +46,15 @@ export class Shipment {
   })
   items: ShipmentItem[];
 
+  @OneToMany(() => Issue, (issue) => issue.referencesShipment)
+  issues: Issue[];
+
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
 
-  // Virtual property for progress calculation
   get progress(): number {
     if (this.totalArticles === 0) return 0;
     return Math.round((this.scannedArticles / this.totalArticles) * 100);

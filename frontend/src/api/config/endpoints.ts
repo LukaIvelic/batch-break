@@ -27,6 +27,10 @@ export const endpoints = {
   issues: {
     base: "/issues",
     byId: (id: string) => `/issues/${id}`,
+    byShipmentId: (shipmentId: string) => `/issues/shipment/${shipmentId}`,
     updateIssue: (id: string) => `/issues/${id}`,
+  },
+  analytics: {
+    overview: "/analytics/overview",
   },
 };

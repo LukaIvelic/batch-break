@@ -1,6 +1,6 @@
 "use client";
 
-import { Shipment } from "@/src/types";
+import { Issue, Shipment } from "@/src/types";
 import InteractiveArticleView from "./InteractiveArticleView";
 import { Title } from "@/src/components/features/title/Title";
 import { Subtitle } from "@/src/components/features/subtitle/Subtitle";
@@ -13,8 +13,20 @@ import {
 import { AppWindowIcon, ListIcon } from "lucide-react";
 import { Field, FieldLabel } from "@/src/components/ui/field";
 import { Progress } from "@/src/components/ui/progress";
+import { issuesService } from "@/src/api/services/issues/IssueService";
+import { useEffect, useState } from "react";
+import { getSeverityLabel } from "../../../shipment-issues-data-table/components/ShipmentIssuesDataTableColumns";
 
 export function ViewShipmentContent({ shipment }: { shipment: Shipment }) {
+  const [issues, setIssues] = useState<Issue[]>([]);
+
+  useEffect(() => {
+    issuesService.getByShipmentId(shipment.id.toString()).then((items) => {
+      items.sort((a, b) => b.issueSeverity - a.issueSeverity);
+      setIssues(items);
+    });
+  }, [shipment.id]);
+
   if (!shipment.items || shipment.items.length === 0) {
     return <div>No articles in this shipment.</div>;
   }
@@ -89,6 +101,32 @@ export function ViewShipmentContent({ shipment }: { shipment: Shipment }) {
             id="shipment-progress"
           />
         </Field>
+
+        {issues.length > 0 && (
+          <Field className="mt-4">
+            <FieldLabel htmlFor="shipment-notes">Shipment Issues</FieldLabel>
+            <div className="border border-foreground/10 p-2 rounded-lg">
+              {issues.map((item, index) => {
+                const number = index + 1;
+                const severity = item.issueSeverity;
+                const description = item.description;
+
+                return (
+                  <div
+                    key={number}
+                    className="grid grid-cols-[30px_1.5fr_5fr] p-2 border-b border-foreground/10 last:border-0 text-[14px]"
+                  >
+                    <span>{number}</span>
+                    <span className="font-mono">
+                      {getSeverityLabel(severity)}
+                    </span>
+                    <span className="font-mono">{description}</span>
+                  </div>
+                );
+              })}
+            </div>
+          </Field>
+        )}
       </div>
     </div>
   );

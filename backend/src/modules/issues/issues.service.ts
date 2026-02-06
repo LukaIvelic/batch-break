@@ -14,6 +14,12 @@ export class IssuesService {
     return this.issueRepository.find({ order: { issueStatus: 'ASC' } });
   }
 
+  async getIssuesByShipmentId(shipmentId: number): Promise<Issue[]> {
+    return this.issueRepository.find({
+      where: { referencesShipment: { id: shipmentId } },
+    });
+  }
+
   async createIssue(issueData: Partial<Issue>): Promise<Issue> {
     const newIssue = this.issueRepository.create(issueData);
     return this.issueRepository.save(newIssue);

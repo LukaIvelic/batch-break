@@ -10,6 +10,7 @@ import { RolesModule } from './modules/roles/roles.module';
 import { ArticlesModule } from './modules/articles/articles.module';
 import { ShipmentsModule } from './modules/shipments/shipments.module';
 import { IssuesModule } from './modules/issues/issues.module';
+import { AnalyticsModule } from './modules/analytics/analytics.module';
 
 interface PinoRequest {
   method: string;
@@ -53,6 +54,7 @@ interface PinoResponse {
     ArticlesModule,
     ShipmentsModule,
     IssuesModule,
+    AnalyticsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

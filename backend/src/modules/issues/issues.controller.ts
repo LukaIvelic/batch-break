@@ -23,6 +23,13 @@ export class IssuesController {
     return this.issuesService.getIssues();
   }
 
+  @Get('shipment/:shipmentId')
+  getIssuesByShipmentId(
+    @Param('shipmentId') shipmentId: number,
+  ): Promise<Issue[]> {
+    return this.issuesService.getIssuesByShipmentId(shipmentId);
+  }
+
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(1, 2, 3)
   @Post()

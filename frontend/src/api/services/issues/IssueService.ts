@@ -7,7 +7,6 @@ class IssueService {
     const res = await api.get<NestResponse<Issue[]>>(endpoints.issues.base, {
       cache: "no-store",
     });
-    console.log("IssueService getAll response:", res);
     return res.response ?? [];
   }
 
@@ -16,6 +15,14 @@ class IssueService {
       cache: "no-store",
     });
     return res.response ?? null;
+  }
+
+  async getByShipmentId(shipmentId: string): Promise<Issue[]> {
+    const res = await api.get<NestResponse<Issue[]>>(
+      endpoints.issues.byShipmentId(shipmentId),
+      { cache: "no-store" },
+    );
+    return res.response ?? [];
   }
 
   async create(payload: Partial<CreateIssuePayload>): Promise<Issue | null> {

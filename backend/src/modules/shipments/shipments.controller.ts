@@ -125,7 +125,6 @@ export class ShipmentsController {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     @Body() _body?: Record<string, never>,
   ): Promise<void> {
-    console.log('Received delete request for shipment ID:', id);
     return this.shipmentsService.delete(id);
   }
 }

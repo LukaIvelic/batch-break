@@ -206,11 +206,9 @@ export class ShipmentsService {
     });
 
     if (shipment) {
-      // Delete items first manually
       if (shipment.items && shipment.items.length > 0) {
         await this.shipmentItemRepository.remove(shipment.items);
       }
-      // Then delete the shipment
       await this.shipmentRepository.remove(shipment);
     }
   }

@@ -1,8 +1,6 @@
 import {
   Home,
   Users,
-  Calendar,
-  BarChart,
   Settings,
   LogOut,
   type LucideIcon,
@@ -61,16 +59,6 @@ export const sidebarConfig = {
       title: "Articles",
       icon: Layers,
       url: "/dashboard/articles",
-    },
-    {
-      title: "Calendar",
-      icon: Calendar,
-      url: "/dashboard/calendar",
-    },
-    {
-      title: "Analytics",
-      icon: BarChart,
-      url: "/dashboard/analytics",
     },
     {
       title: "Management",
